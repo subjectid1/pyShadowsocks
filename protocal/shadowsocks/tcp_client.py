@@ -16,7 +16,7 @@ from protocal.shadowsocks.header import ShadowsocksHeader
 from protocal.streampacker import StreamPacker
 
 
-class ShadowsocksTCPServerProtocol(asyncio.Protocol):
+class ShadowsocksTCPClientProtocol(asyncio.Protocol):
     def __init__(self):
         self.decoder = StreamPacker(
             header_type=ShadowsocksHeader,
