@@ -42,12 +42,12 @@ class StreamPacker(object):
         self.out_bytes += len(encoded_data)
         return encoded_data
 
-    def unpack(self, data):
+    def unpack(self, data=None, has_header=False):
         """return header and raw content"""
         self.in_bytes += len(data)
         raw_data = self.data_encoder.decode(data)
 
-        if not self.header:
+        if not self.header and has_header:
             header = self.header_type()
             try:
                 all_data = self.data_buffer+raw_data

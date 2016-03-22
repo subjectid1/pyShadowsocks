@@ -14,23 +14,8 @@ import config
 from config import PROTO_LOG
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocal.shadowsocks.header import ShadowsocksHeader
+from protocal.shadowsocks.tcp_relay import TCPRelay
 from protocal.streampacker import StreamPacker
-
-
-class Client(asyncio.Protocol):
-    def __init__(self, data_callback, conn_lost_callback):
-        super(Client, self).__init__()
-        self.data_callback = data_callback
-        self.conn_lost_callback = conn_lost_callback
-
-    def connection_made(self, transport):
-        self.transport = transport
-
-    def data_received(self, data):
-        self.data_callback(data)
-
-    def connection_lost(self, *args):
-        self.conn_lost_callback(*args)
 
 
 class ShadowsocksTCPServerProtocol(asyncio.Protocol):
@@ -51,8 +36,8 @@ class ShadowsocksTCPServerProtocol(asyncio.Protocol):
                 encript_mode=True),
         )
 
-        self.transport = None
         self.loop = loop
+        self.transport = None
         self.client = None
 
     def connection_made(self, transport):
@@ -62,33 +47,42 @@ class ShadowsocksTCPServerProtocol(asyncio.Protocol):
 
     @asyncio.coroutine
     def send_data_to_remote(self, header, raw_data):
-        if not self.client and self.header:
-            protocol, self.client = yield from self.loop.create_connection(
-                lambda: Client(self.data_received_from_remote, self.connection_lost_from_remote),
-                header.addr,
-                header.port)
-        elif self.client:
-            self.client.transport.write(raw_data)
+        if not self.client:
+            if header:
+                _, self.client = yield from self.loop.create_connection(
+                    lambda: TCPRelay(self.data_received_from_remote,
+                                     self.connection_lost_from_remote),
+                    header.addr,
+                    header.port)
+                PROTO_LOG.info('Connection to {}'.format(self.client.transport.get_extra_info('peername')))
+                self.client.transport.write(raw_data)
+            else:
+                PROTO_LOG.error('where is the header?')
+                self.transport.close()
+
+        else:
+            if raw_data is None or len(raw_data) == 0:
+                PROTO_LOG.info('get null data from client {}'.format(
+                    self.client.transport.get_extra_info('peername'))
+                )
+            else:
+                self.client.transport.write(raw_data)
 
     def data_received_from_remote(self, data):
-        # no need to send back the header
-        encoded_data = self.packer.pack(data=data)
+        encoded_data = self.packer.pack(data=data, header=None)
         self.transport.write(encoded_data)
 
     def connection_lost_from_remote(self, *args):
-        # fail from remote
+        self.client = None
         self.transport.close()
 
     def data_received(self, data):
-        header, raw_data = self.unpacker.unpack(data)
-        if header:
-            self.header = header
-            assert (isinstance(self.header, ShadowsocksHeader))
-
-        asyncio.Task(self.send_data_to_remote(header, raw_data))
+        header, raw_data = self.unpacker.unpack(data, has_header=True)
+        asyncio.Task(self.send_data_to_remote(header, raw_data), loop=self.loop)
 
     def connection_lost(self, exc):
-        pass
+        if self.client:
+            self.client.transport.close()
 
 
 if __name__ == '__main__':

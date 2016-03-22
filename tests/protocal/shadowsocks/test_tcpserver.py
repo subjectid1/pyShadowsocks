@@ -17,18 +17,14 @@ from protocal.shadowsocks.tcp_server import ShadowsocksTCPServerProtocol
 from protocal.streampacker import StreamPacker
 
 
-
-
 class ShadowsocksTCPServerTest(unittest.TestCase):
-    def test_data_received(self):
+    def test_data_relay(self):
         # Create a pair of connected sockets
-        rsock, wsock = socketpair()
+        lsock, rsock = socketpair()
         loop = asyncio.get_event_loop()
 
-
-
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda :ShadowsocksTCPServerProtocol(loop), sock=rsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksTCPServerProtocol(loop), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
         packer = StreamPacker(
@@ -38,61 +34,39 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
                 password=config.password,
                 encript_mode=True),
         )
+
+        unpacker = StreamPacker(
+            header_type=ShadowsocksHeader,
+            encoder=ShadowsocksEncryptionWrapperEncoder(
+                encrypt_method=config.cipher_method,
+                password=config.password,
+                encript_mode=False),
+        )
+
         protocol.loop = loop
         header = ShadowsocksHeader(addr='example.com', port=80, addr_type=constants.ADDRTYPE_HOST)
         http_request_content = b'GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
 
         # Simulate the reception of data from the network
-        encoded_data = packer.pack(header, http_request_content)
-        loop.call_soon(wsock.send, encoded_data)
+        encoded_data = packer.pack(header=header, data=http_request_content)
+        loop.call_soon(rsock.send, encoded_data)
 
+        def reader():
+            data = rsock.recv(100)
+            if not data or len(data) == 0:
+                return
 
+            _, http_response_content = unpacker.unpack(data=data, has_header=False)
+            self.assertEqual(http_response_content[:4], b'HTTP')
+            # We are done: unregister the file descriptor
+            loop.remove_reader(rsock)
+            lsock.close()
+            rsock.close()
+            # Stop the event loop
+            loop.stop()
+
+        # Register the file descriptor for read event
+        loop.add_reader(rsock, reader)
         # Run the event loop
         loop.run_forever()
-
         # We are done, close sockets and the event loop
-        rsock.close()
-        wsock.close()
-        loop.close()
-
-    def test2(self):
-        import asyncio
-        try:
-            from socket import socketpair
-        except ImportError:
-            from asyncio.windows_utils import socketpair
-
-        # Create a pair of connected sockets
-        rsock, wsock = socketpair()
-        loop = asyncio.get_event_loop()
-
-        class MyProtocol(asyncio.Protocol):
-            transport = None
-
-            def connection_made(self, transport):
-                self.transport = transport
-
-            def data_received(self, data):
-                print("Received:", data.decode())
-
-                # We are done: close the transport (it will call connection_lost())
-                self.transport.close()
-
-            def connection_lost(self, exc):
-                # The socket has been closed, stop the event loop
-                loop.stop()
-
-        # Register the socket to wait for data
-        connect_coro = loop.create_connection(MyProtocol, sock=rsock)
-        transport, protocol = loop.run_until_complete(connect_coro)
-
-        # Simulate the reception of data from the network
-        loop.call_soon(wsock.send, 'abc'.encode())
-
-        # Run the event loop
-        loop.run_forever()
-
-        # We are done, close sockets and the event loop
-        rsock.close()
-        wsock.close()
-        loop.close()
