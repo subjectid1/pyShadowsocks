@@ -12,9 +12,9 @@ from socket import socketpair
 import config
 import constants
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
-from protocal.shadowsocks.header import ShadowsocksHeader
-from protocal.shadowsocks.tcp_server import ShadowsocksTCPServerProtocol
-from protocal.streampacker import StreamPacker
+from protocal.shadowsocks.header import ShadowsocksPacketHeader
+from protocal.shadowsocks.tcp_server import ShadowsocksTCPServerRelayProtocol
+from protocal.stream_packer import StreamPacker
 
 
 class ShadowsocksTCPServerTest(unittest.TestCase):
@@ -24,11 +24,10 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         loop = asyncio.get_event_loop()
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksTCPServerProtocol(loop), sock=lsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksTCPServerRelayProtocol(loop), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
         packer = StreamPacker(
-            header_type=ShadowsocksHeader,
             encoder=ShadowsocksEncryptionWrapperEncoder(
                 encrypt_method=config.cipher_method,
                 password=config.password,
@@ -36,7 +35,6 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         )
 
         unpacker = StreamPacker(
-            header_type=ShadowsocksHeader,
             encoder=ShadowsocksEncryptionWrapperEncoder(
                 encrypt_method=config.cipher_method,
                 password=config.password,
@@ -44,7 +42,7 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         )
 
         protocol.loop = loop
-        header = ShadowsocksHeader(addr='example.com', port=80, addr_type=constants.ADDRTYPE_HOST)
+        header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.ADDRTYPE_HOST)
         http_request_content = b'GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
 
         # Simulate the reception of data from the network
@@ -56,7 +54,7 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
             if not data or len(data) == 0:
                 return
 
-            _, http_response_content = unpacker.unpack(data=data, has_header=False)
+            _, http_response_content = unpacker.unpack(data=data, header=None)
             self.assertEqual(http_response_content[:4], b'HTTP')
             # We are done: unregister the file descriptor
             loop.remove_reader(rsock)

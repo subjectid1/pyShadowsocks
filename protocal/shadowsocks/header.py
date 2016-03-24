@@ -10,10 +10,10 @@ import socket
 
 import constants
 import struct
-from protocal.header import Header
+from protocal.packet_header import PacketHeader
 
 
-class ShadowsocksHeader(Header):
+class ShadowsocksPacketHeader(PacketHeader):
     ValidFields = ['addr_type', 'addr', 'port', 'sha1_hmac']
 
     def is_valid(self):

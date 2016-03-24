@@ -6,10 +6,10 @@
 # Info:
 #
 #
-from abc import abstractmethod
+from abc import abstractmethod, ABCMeta
 from typing import Dict
 
-class PacketHeader(Dict):
+class PacketHeader(Dict, metaclass=ABCMeta):
     ValidFields = []
 
     def __setitem__(self, key, value):

@@ -53,10 +53,10 @@ class StreamPacker(object):
             except ValueError:
                 # need more data
                 self.data_buffer = all_data
-                return
+                return None, None
             except Exception as ex:
                 # TODO:do something
-                return
+                return None, None
             else:
                 self.data_buffer = b''
                 out_data = all_data[header_length:]
