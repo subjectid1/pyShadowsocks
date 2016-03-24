@@ -9,8 +9,6 @@
 #
 import asyncio
 
-import functools
-
 import config
 from protocal.packet_header import PacketHeader
 from protocal.server_relay_protocal import ServerRelayProtocol
@@ -20,11 +18,9 @@ from protocal.stream_packer import StreamPacker
 
 
 class ShadowsocksTCPServerRelayProtocol(ServerRelayProtocol):
-
     def __init__(self, loop):
-        super(ShadowsocksTCPServerRelayProtocol,self).__init__(loop)
+        super(ShadowsocksTCPServerRelayProtocol, self).__init__(loop)
         self.header = None
-
 
     def create_packer(self):
         return StreamPacker(
@@ -63,11 +59,11 @@ class ShadowsocksTCPServerRelayProtocol(ServerRelayProtocol):
         else:
             # TODO: run two task one by one, using the simplier styly
             f = asyncio.ensure_future(self.set_up_relay(self.header.addr, self.header.port), loop=self.loop)
+
             def send_data(_):
                 asyncio.ensure_future(self.send_data_to_remote(None, raw_data), loop=self.loop)
 
             f.add_done_callback(send_data)
-
 
 
 if __name__ == '__main__':
