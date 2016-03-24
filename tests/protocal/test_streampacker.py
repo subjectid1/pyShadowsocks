@@ -10,11 +10,11 @@ import unittest
 
 import os
 from encrypt.base.data_encoder import DataEncoder
-from protocal.header import Header
+from protocal.packet_header import PacketHeader
 from protocal.stream_packer import StreamPacker
 
 
-class DummyHeader(Header):
+class DummyPacketHeader(PacketHeader):
     ValidFields = ['one_byte']
 
     def from_bytes(self, data):
@@ -49,13 +49,13 @@ class StreamPackerTest(unittest.TestCase):
         data1 = os.urandom(30)
         data2 = os.urandom(20)
 
-        dummy_header = DummyHeader()
+        dummy_header = DummyPacketHeader()
         dummy_header.from_bytes(data_header)
 
         encoded_data = packer.pack(dummy_header, data1)
         encoded_data += packer.pack(None, data2)
 
-        header, decoded_data = unpacker.unpack(DummyHeader(), encoded_data)
+        header, decoded_data = unpacker.unpack(DummyPacketHeader(), encoded_data)
         self.assertEqual(header.to_bytes() + decoded_data, data_header + data1 + data2)
 
         in_bytes_1 = packer.in_bytes

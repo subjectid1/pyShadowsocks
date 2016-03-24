@@ -7,7 +7,7 @@
 #
 #
 from encrypt.base.data_encoder import DataEncoder
-from protocal.header import Header
+from protocal.packet_header import PacketHeader
 
 
 class StreamPacker(object):
@@ -23,7 +23,7 @@ class StreamPacker(object):
         # used for unpack mode
         self.data_buffer = b''
 
-    def pack(self, header:Header=None, data=None):
+    def pack(self, header:PacketHeader=None, data=None):
         """return encode or compress data"""
         encoded_data = b''
         if header:
@@ -41,7 +41,7 @@ class StreamPacker(object):
         self.out_bytes += len(encoded_data)
         return encoded_data
 
-    def unpack(self, header:Header=None, data=None):
+    def unpack(self, header:PacketHeader=None, data=None):
         """return header and raw content"""
         self.in_bytes += len(data)
         raw_data = self.data_encoder.decode(data)
