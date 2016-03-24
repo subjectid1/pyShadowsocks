@@ -13,21 +13,20 @@ from protocal.header import Header
 class StreamPacker(object):
     """used by stream protocal like TCP"""
 
-    def __init__(self, encoder: DataEncoder = None, header_type: Header = None):
+    def __init__(self, encoder: DataEncoder = None):
         self.data_encoder = encoder
-        self.header_type = header_type
-        self.header = None
 
         # counter bytes for later use
         self.in_bytes = 0
         self.out_bytes = 0
+
+        # used for unpack mode
         self.data_buffer = b''
 
-    def pack(self, header=None, data=None):
+    def pack(self, header:Header=None, data=None):
         """return encode or compress data"""
         encoded_data = b''
         if header:
-            self.header = header
             encoded_data += header.to_bytes()
 
         if data:
@@ -42,29 +41,27 @@ class StreamPacker(object):
         self.out_bytes += len(encoded_data)
         return encoded_data
 
-    def unpack(self, data=None, has_header=False):
+    def unpack(self, header:Header=None, data=None):
         """return header and raw content"""
         self.in_bytes += len(data)
         raw_data = self.data_encoder.decode(data)
 
-        if not self.header and has_header:
-            header = self.header_type()
+        if header is not None:
+            all_data = self.data_buffer + raw_data
             try:
-                all_data = self.data_buffer+raw_data
                 header_length = header.from_bytes(all_data)
             except ValueError:
                 # need more data
                 self.data_buffer = all_data
                 return
             except Exception as ex:
-                # do something
+                # TODO:do something
                 return
             else:
                 self.data_buffer = b''
-                self.header = header
                 out_data = all_data[header_length:]
                 self.out_bytes += len(all_data)
-                return self.header, out_data
+                return header, out_data
         else:
             out_data = self.data_buffer+raw_data
             self.out_bytes += len(out_data)
