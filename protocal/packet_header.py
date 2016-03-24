@@ -9,18 +9,18 @@
 from abc import abstractmethod
 from typing import Dict
 
-class Header(Dict):
+class PacketHeader(Dict):
     ValidFields = []
 
     def __setitem__(self, key, value):
         if key in self.ValidFields:
-            return super(Header, self).__setitem__(key, value)
+            return super(PacketHeader, self).__setitem__(key, value)
         else:
             raise KeyError
 
     def __getitem__(self, item):
         try:
-            return super(Header, self).__getitem__(item)
+            return super(PacketHeader, self).__getitem__(item)
         except KeyError:
             if item in self.ValidFields:
                 return None
