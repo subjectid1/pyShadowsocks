@@ -56,6 +56,7 @@ class ShadowsocksServerRelayProtocol(ServerRelayProtocol):
                 return
 
         if self.client:
+            # TODO: inspect the relay client' connection status, try to reconnect if disconn
             asyncio.ensure_future(self.send_data_to_remote(None, raw_data), loop=self.loop)
         else:
             # TODO: run two task one by one, using the simplier styly

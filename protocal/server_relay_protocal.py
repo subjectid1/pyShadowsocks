@@ -80,13 +80,12 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
 
     @abstractmethod
     def data_received(self, data):
-        header, raw_data = self.unpacker.unpack(header=ShadowsocksPacketHeader(), data=data)
+        _, raw_data = self.unpacker.unpack(header=None, data=data)
 
         if self.client:
-            # TODO: inspect the relay client' connection status, try to reconnect if disconn
             asyncio.Task(self.send_data_to_remote(None, raw_data), loop=self.loop)
         else:
-            asyncio.Task(self.set_up_relay(header.addr, header.port), loop=self.loop)
+            asyncio.Task(self.set_up_relay('example.com', 80), loop=self.loop)
 
     def connection_lost_from_remote(self, *args):
         self.client = None
