@@ -10,8 +10,9 @@ import asyncio
 
 from abc import abstractmethod, ABCMeta
 from config import PROTO_LOG
+from packet.packet_header import PacketHeader
 from protocal.client_relay_protocal import ClientRelayProtocol
-from protocal.packet_header import PacketHeader
+from protocal.shadowsocks.header import ShadowsocksPacketHeader
 
 
 class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
@@ -79,7 +80,7 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
 
     @abstractmethod
     def data_received(self, data):
-        header, raw_data = self.unpacker.unpack(header=None, data=data)
+        header, raw_data = self.unpacker.unpack(header=ShadowsocksPacketHeader(), data=data)
 
         if self.client:
             # TODO: inspect the relay client' connection status, try to reconnect if disconn

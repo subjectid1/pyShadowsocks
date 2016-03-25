@@ -7,7 +7,7 @@
 #
 #
 from encrypt.base.data_encoder import DataEncoder
-from protocal.packet_header import PacketHeader
+from packet.packet_header import PacketHeader
 
 
 class StreamPacker(object):

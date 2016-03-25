@@ -8,10 +8,11 @@
 #
 import unittest
 
+
 import os
 from encrypt.base.data_encoder import DataEncoder
-from protocal.packet_header import PacketHeader
-from protocal.stream_packer import StreamPacker
+from packet.packet_header import PacketHeader
+from packet.stream_packer import StreamPacker
 
 
 class DummyPacketHeader(PacketHeader):

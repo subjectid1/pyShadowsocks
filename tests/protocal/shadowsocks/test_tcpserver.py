@@ -9,12 +9,13 @@
 import asyncio
 import unittest
 from socket import socketpair
+
 import config
 import constants
+from packet.stream_packer import StreamPacker
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocal.shadowsocks.header import ShadowsocksPacketHeader
-from protocal.shadowsocks.tcp_server import ShadowsocksTCPServerRelayProtocol
-from protocal.stream_packer import StreamPacker
+from protocal.shadowsocks.server import ShadowsocksTCPServerRelayProtocol
 
 
 class ShadowsocksTCPServerTest(unittest.TestCase):

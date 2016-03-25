@@ -9,7 +9,7 @@
 import asyncio
 from typing import Callable
 
-from protocal.packet_header import PacketHeader
+from packet.packet_header import PacketHeader
 
 
 class ClientRelayProtocol(asyncio.Protocol):
@@ -17,6 +17,7 @@ class ClientRelayProtocol(asyncio.Protocol):
         super(ClientRelayProtocol, self).__init__()
         self.data_callback = data_callback
         self.conn_lost_callback = conn_lost_callback
+        self.transport = None
 
     def send_data(self, header: PacketHeader, data: bytes):
         """You can add addional header before header, String them together"""
