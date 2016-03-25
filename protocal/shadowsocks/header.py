@@ -10,7 +10,7 @@ import socket
 
 import constants
 import struct
-from protocal.packet_header import PacketHeader
+from packet.packet_header import PacketHeader
 
 
 class ShadowsocksPacketHeader(PacketHeader):
