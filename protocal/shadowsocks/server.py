@@ -9,17 +9,18 @@
 #
 import asyncio
 
+
 import config
-from protocal.packet_header import PacketHeader
+from packet.packet_header import PacketHeader
+from packet.stream_packer import StreamPacker
 from protocal.server_relay_protocal import ServerRelayProtocol
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocal.shadowsocks.header import ShadowsocksPacketHeader
-from protocal.stream_packer import StreamPacker
 
 
-class ShadowsocksTCPServerRelayProtocol(ServerRelayProtocol):
+class ShadowsocksServerRelayProtocol(ServerRelayProtocol):
     def __init__(self, loop):
-        super(ShadowsocksTCPServerRelayProtocol, self).__init__(loop)
+        super(ShadowsocksServerRelayProtocol, self).__init__(loop)
         self.header = None
 
     def create_packer(self):
@@ -39,10 +40,10 @@ class ShadowsocksTCPServerRelayProtocol(ServerRelayProtocol):
         )
 
     def get_relay_protocal(self):
-        return super(ShadowsocksTCPServerRelayProtocol, self).get_relay_protocal()
+        return super(ShadowsocksServerRelayProtocol, self).get_relay_protocal()
 
     def data_received_from_remote(self, header: PacketHeader, data: bytes):
-        return super(ShadowsocksTCPServerRelayProtocol, self).data_received_from_remote(header, data)
+        return super(ShadowsocksServerRelayProtocol, self).data_received_from_remote(header, data)
 
     def data_received(self, data):
         if not self.header:

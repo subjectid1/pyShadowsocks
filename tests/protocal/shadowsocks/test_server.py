@@ -15,7 +15,7 @@ import constants
 from packet.stream_packer import StreamPacker
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocal.shadowsocks.header import ShadowsocksPacketHeader
-from protocal.shadowsocks.server import ShadowsocksTCPServerRelayProtocol
+from protocal.shadowsocks.server import ShadowsocksServerRelayProtocol
 
 
 class ShadowsocksTCPServerTest(unittest.TestCase):
@@ -25,7 +25,7 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         loop = asyncio.get_event_loop()
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksTCPServerRelayProtocol(loop), sock=lsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
         packer = StreamPacker(
