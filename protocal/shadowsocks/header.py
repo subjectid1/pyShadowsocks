@@ -13,16 +13,15 @@ import struct
 from packet.packet_header import PacketHeader
 
 
-class ShadowsocksPacketHeader(PacketHeader):
-    ValidFields = ['addr_type', 'addr', 'port', 'sha1_hmac']
+class Socks5AddrHeader(PacketHeader):
+    ValidFields = ['addr_type', 'addr', 'port']
 
     def is_valid(self):
         valid = True
-        if not self.addr_type in [constants.ADDRTYPE_IPV4, constants.ADDRTYPE_IPV6, constants.ADDRTYPE_HOST]:
+        if not self.addr_type in [constants.SOCKS5_ADDRTYPE_IPV4, constants.SOCKS5_ADDRTYPE_IPV6,
+                                  constants.SOCKS5_ADDRTYPE_HOST]:
             valid = False
         elif not isinstance(self.port, int):
-            valid = False
-        elif self.sha1_hmac and not isinstance(self.sha1_hmac, bytes):
             valid = False
 
         return valid
@@ -36,9 +35,7 @@ class ShadowsocksPacketHeader(PacketHeader):
         addr_bytes = self._pack_addr_bytes_from(self.addr_type, self.addr)
         port_bytes = struct.pack('>H', self.port)
 
-        sha1_hmac = self.sha1_hmac or b''
-
-        return addr_bytes + port_bytes + sha1_hmac
+        return addr_bytes + port_bytes
 
     def from_bytes(self, data):
         """
@@ -57,13 +54,13 @@ class ShadowsocksPacketHeader(PacketHeader):
 
     def _pack_addr_bytes_from(self, addr_type, addr):
         addr_bytes = None
-        if addr_type in [constants.ADDRTYPE_IPV4, constants.ADDRTYPE_IPV6]:
+        if addr_type in [constants.SOCKS5_ADDRTYPE_IPV4, constants.SOCKS5_ADDRTYPE_IPV6]:
 
-            addr_bytes = socket.inet_pton({constants.ADDRTYPE_IPV4: socket.AF_INET,
-                                           constants.ADDRTYPE_IPV6: socket.AF_INET6}[addr_type],
+            addr_bytes = socket.inet_pton({constants.SOCKS5_ADDRTYPE_IPV4: socket.AF_INET,
+                                           constants.SOCKS5_ADDRTYPE_IPV6: socket.AF_INET6}[addr_type],
                                           addr)
 
-        elif addr_type == constants.ADDRTYPE_HOST:
+        elif addr_type == constants.SOCKS5_ADDRTYPE_HOST:
             if len(addr) > 255:
                 addr = addr[:255]
             addr_bytes = chr(len(addr)) + addr
@@ -80,15 +77,14 @@ class ShadowsocksPacketHeader(PacketHeader):
 
         exception_when_no_enough_data = ValueError("no enough data to unpack")
 
-
-        if addr_type & constants.ADDRTYPE_MASK == constants.ADDRTYPE_IPV4:
+        if addr_type & constants.ADDRTYPE_MASK == constants.SOCKS5_ADDRTYPE_IPV4:
             if len(addr_data) >= 4:
                 dest_addr = socket.inet_ntop(socket.AF_INET, addr_data[:4])
                 addr_length = 5
             else:
                 raise exception_when_no_enough_data
 
-        elif addr_type & constants.ADDRTYPE_MASK == constants.ADDRTYPE_HOST:
+        elif addr_type & constants.ADDRTYPE_MASK == constants.SOCKS5_ADDRTYPE_HOST:
             if len(addr_data) > 2:
                 field_len = ord(addr_data[:1])
                 remain_data = addr_data[1:]
@@ -100,7 +96,7 @@ class ShadowsocksPacketHeader(PacketHeader):
                     raise exception_when_no_enough_data
             else:
                 raise exception_when_no_enough_data
-        elif addr_type & constants.ADDRTYPE_MASK == constants.ADDRTYPE_IPV6:
+        elif addr_type & constants.ADDRTYPE_MASK == constants.SOCKS5_ADDRTYPE_IPV6:
             if len(addr_data) >= 16:
                 dest_addr = socket.inet_ntop(socket.AF_INET6, addr_data[:16])
                 addr_length = 17
@@ -111,3 +107,12 @@ class ShadowsocksPacketHeader(PacketHeader):
                           'encryption method' % addr_type)
 
         return addr_length, addr_type, dest_addr
+
+
+class ShadowsocksPacketHeader(Socks5AddrHeader):
+    ValidFields = ['addr_type', 'addr', 'port', 'sha1_hmac']
+
+    def to_bytes(self):
+        data = super(ShadowsocksPacketHeader, self).to_bytes()
+        sha1_hmac = self.sha1_hmac or b''
+        return data + sha1_hmac
