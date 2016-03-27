@@ -43,7 +43,7 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         )
 
         protocol.loop = loop
-        header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.ADDRTYPE_HOST)
+        header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.SOCKS5_ADDRTYPE_HOST)
         http_request_content = b'GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
 
         # Simulate the reception of data from the network

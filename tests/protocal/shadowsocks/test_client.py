@@ -49,7 +49,7 @@ class ShadowsocksClientTest(unittest.TestCase):
         _, client_protocol = loop.run_until_complete(connect_coro)
 
 
-        header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.ADDRTYPE_HOST)
+        header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.SOCKS5_ADDRTYPE_HOST)
         http_request_content = b'GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
 
         client_protocol.send_data(header, http_request_content)
