@@ -20,6 +20,6 @@ if __name__ == '__main__':
     if settings.protocol == constants.PROTOCOL_SHADOWSOCKS:
         loop = asyncio.get_event_loop()
         # Each client connection will create a new protocol instance
-        coro = loop.create_server(lambda: ShadowsocksServerRelayProtocol(loop), '127.0.0.1', settings.listen_port)
+        coro = loop.create_server(lambda: ShadowsocksServerRelayProtocol(loop), '0.0.0.0', settings.listen_port)
         server = loop.run_until_complete(coro)
         loop.run_forever()

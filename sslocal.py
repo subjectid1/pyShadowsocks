@@ -22,7 +22,7 @@ if __name__ == '__main__':
         # Each client connection will create a new protocol instance
         coro = loop.create_server(
             lambda: ShadowsocksSOCKS5ServerProtocol(loop, settings.remote_host, settings.remote_port),
-            '127.0.0.1',
+            '0.0.0.0',
             settings.listen_port)
 
         server = loop.run_until_complete(coro)
