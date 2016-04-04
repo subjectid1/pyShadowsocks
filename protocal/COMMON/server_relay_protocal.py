@@ -9,7 +9,7 @@
 import asyncio
 
 from abc import abstractmethod, ABCMeta
-from config import PROTO_LOG
+from settings import PROTO_LOG
 from protocal.COMMON.base_protocal import BaseServerProtocal
 from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 

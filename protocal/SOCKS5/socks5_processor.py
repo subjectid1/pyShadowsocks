@@ -9,7 +9,7 @@
 import asyncio
 from typing import Callable, Tuple
 
-import config
+import settings
 import constants
 from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_SOCKS5_REQUEST, STAGE_SOCKS5_UDP_ASSOCIATE, STAGE_RELAY, \
     STRUCT_BBB, STRUCT_BB, STRUCT_B, STRUCT_SOCK5_REPLY
@@ -55,7 +55,7 @@ class Socks5Processor(object):
             # +-----+--------+
             #
             if len(data) < 3:
-                config.PROTO_LOG.warn('no enough data for SOCKS METHOD SELECT')
+                settings.PROTO_LOG.warn('no enough data for SOCKS METHOD SELECT')
                 self.transport.close()
                 return False
 
@@ -96,7 +96,7 @@ class Socks5Processor(object):
             # +-----+-----+-------+------+----------+----------+
             #
             if len(data) < 10:
-                config.PROTO_LOG.error('no enough data for SOCKS request')
+                settings.PROTO_LOG.error('no enough data for SOCKS request')
                 self.transport.close()
                 return False
 
@@ -108,7 +108,7 @@ class Socks5Processor(object):
                 try:
                     length = addr.from_bytes(remain_data)
                 except ValueError:
-                    config.PROTO_LOG.exception('Fail to get addr')
+                    settings.PROTO_LOG.exception('Fail to get addr')
                     response_data = STRUCT_SOCK5_REPLY.pack(constants.SOCKS5_VERSION,
                                                             constants.SOCKS_REPLY_ADDRESS_TYPE_NOT_SUPPORTED,
                                                             constants.SOCKS5_RESERVED_BYTE,
@@ -151,7 +151,7 @@ class Socks5Processor(object):
                 # TODO
                 pass
             else:
-                config.PROTO_LOG.warn('cmd=>%d, socks5 dosnt support!', cmd)
+                settings.PROTO_LOG.warn('cmd=>%d, socks5 dosnt support!', cmd)
                 response_data = STRUCT_SOCK5_REPLY.pack(constants.SOCKS5_VERSION,
                                                         constants.SOCKS5_REPLY_COMMAND_NOT_SUPPORTED,
                                                         constants.SOCKS5_RESERVED_BYTE,

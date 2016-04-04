@@ -10,7 +10,7 @@ import asyncio
 import unittest
 from socket import socketpair
 
-import config
+import settings
 import constants
 from packet.stream_packer import StreamPacker
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
@@ -29,13 +29,13 @@ class ShadowsocksServerTest(unittest.TestCase):
         transport, protocol = loop.run_until_complete(connect_coro)
 
         encoder = encoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=config.cipher_method,
-            password=config.password,
+            encrypt_method=settings.cipher_method,
+            password=settings.password,
             encript_mode=True)
 
         decoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=config.cipher_method,
-            password=config.password,
+            encrypt_method=settings.cipher_method,
+            password=settings.password,
             encript_mode=False)
 
         packer = StreamPacker()

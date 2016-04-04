@@ -8,7 +8,7 @@
 #
 import asyncio
 
-import config
+import settings
 
 
 class BaseProtocol(asyncio.Protocol):
@@ -19,7 +19,7 @@ class BaseProtocol(asyncio.Protocol):
 
     def connection_made(self, transport):
         peername = transport.get_extra_info('peername')
-        config.PROTO_LOG.info('Connection from {}'.format(peername))
+        settings.PROTO_LOG.info('Connection from {}'.format(peername))
         self.transport = transport
 
 

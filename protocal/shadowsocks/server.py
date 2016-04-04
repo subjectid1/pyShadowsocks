@@ -9,7 +9,7 @@
 #
 import asyncio
 
-import config
+import settings
 from packet.stream_packer import StreamPacker
 from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 from protocal.COMMON.server_relay_protocal import ServerRelayProtocol
@@ -25,14 +25,14 @@ class ShadowsocksServerRelayProtocol(ServerRelayProtocol):
 
     def create_encoder(self):
         return ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=config.cipher_method,
-            password=config.password,
+            encrypt_method=settings.cipher_method,
+            password=settings.password,
             encript_mode=True)
 
     def create_decoder(self):
         return ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=config.cipher_method,
-            password=config.password,
+            encrypt_method=settings.cipher_method,
+            password=settings.password,
             encript_mode=False)
 
     def get_relay_protocal(self):

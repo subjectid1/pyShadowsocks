@@ -8,7 +8,7 @@
 #
 from typing import Callable
 
-import config
+import settings
 import constants
 from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_RELAY, STRUCT_BBB, SOCKS5_VERSION, \
     SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED, STAGE_SOCKS5_REQUEST
@@ -70,7 +70,7 @@ class SOCKS5ConnectProtocol(BaseProtocol):
         # +-----+--------+
         #
         if len(data) < constants.STRUCT_BB.size:
-            config.PROTO_LOG.error(constants.ERROR_MSG_NOT_ENOUGHT_DATA_FOR.format('socks5 method select response'))
+            settings.PROTO_LOG.error(constants.ERROR_MSG_NOT_ENOUGHT_DATA_FOR.format('socks5 method select response'))
             self.transport.close()
 
         version, method = constants.STRUCT_BB.unpack_from(data)
@@ -113,7 +113,7 @@ class SOCKS5ConnectProtocol(BaseProtocol):
         # +-----+-----+-------+------+----------+----------+
         #
         if len(data) < 10:
-            config.PROTO_LOG.error(constants.ERROR_MSG_NOT_ENOUGHT_DATA_FOR.format('socks5 method connect response'))
+            settings.PROTO_LOG.error(constants.ERROR_MSG_NOT_ENOUGHT_DATA_FOR.format('socks5 method connect response'))
             self.transport.close()
             return False
 
@@ -124,14 +124,14 @@ class SOCKS5ConnectProtocol(BaseProtocol):
                 length = addr.from_bytes(data[STRUCT_BBB.size:])
                 return True
             except ValueError:
-                config.PROTO_LOG.exception('Fail to parse addr')
+                settings.PROTO_LOG.exception('Fail to parse addr')
                 self.transport.close()
                 return False
         else:
             # When a reply (REP value other than X'00') indicates a failure, the
             # SOCKS server MUST terminate the TCP connection shortly after sending
             # the reply. Here we close the client too.
-            config.PROTO_LOG.error('error code for connect response:%d', reply_code)
+            settings.PROTO_LOG.error('error code for connect response:%d', reply_code)
             self.transport.close()
             return False
 
