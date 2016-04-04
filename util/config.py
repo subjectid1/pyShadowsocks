@@ -5,7 +5,7 @@
 #
 # Info:
 #
-
+import argparse
 import configparser
 
 import os.path
@@ -29,7 +29,14 @@ def get_config():
     return None
 
 
-def get_config_by_section(section):
-    config = get_config()
-    return config[section]
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(description='This program implement the shadowsocks protocol.')
+    parser.add_argument('--protocol', dest='protocol', required=True, default='shadowsocks', help='proxy solusion.')
+    parser.add_argument('--password', dest='password', required=False, help='proxy solusion.')
+    parser.add_argument('--cipher_method', dest='cipher_method', required=False, help='proxy solusion.')
+    parser.add_argument('--ota_enabled', dest='ota_enabled', required=False, default=False, help='proxy solusion.')
 
+    # group = parser.add_mutually_exclusive_group(required=True)
+
+    args = parser.parse_args(args=args)
+    return vars(args)
