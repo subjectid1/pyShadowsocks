@@ -18,15 +18,12 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(section.get('password'), '123456')
 
     def test_parse_args(self):
-        d = {
-            'password': '123456',
-            'protocol': 'shadowsocks',
-            'cipher_method': 'aes-256-cfb'
-        }
-        args = []
-        for k, v in d.items():
-            args.extend(['--' + k, v])
+        args_s = '--listen_port 80 --protocol shadowsocks --password 123456 --cipher_method aes-256-cfb'
 
-        d2 = parse_args(args)
-        for k, v in d.items():
-            self.assertEqual(v, d2[k])
+        d = parse_args(False, args_s.split(' '))
+        self.assertEqual(d['listen_port'], 80)
+
+        args_s = '--remote_host 192.168.1.1 --remote_port 80 --protocol shadowsocks --password 123456 --cipher_method aes-256-cfb'
+
+        d = parse_args(True, args_s.split(' '))
+        self.assertEqual(d['remote_port'], 80)

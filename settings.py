@@ -14,7 +14,17 @@ PROTO_LOG = get_logger('protocol', logging.INFO)
 CONFIG_LOG = get_logger('config', logging.INFO)
 CONFIG_FILES = ['/etc/pyshadowsocks.ini', '~/.pyshadowsocks.ini', './pyshadowsocks.ini']
 
-protocol = 'shadowsocks'
-password = 'O3O4O5O6'
-cipher_method = 'aes-256-cfb'
+# [local]
+remote_host = None
+remote_port = None
+
+# [remote]
+listen_port = None
+
+# [protocol]
+protocol = None
+
+# [shadowsocks]
+password = None
+cipher_method = None
 ota_enabled = False

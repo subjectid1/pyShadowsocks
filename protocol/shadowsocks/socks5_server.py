@@ -5,17 +5,18 @@
 #
 # Info: https://www.ietf.org/rfc/rfc1928.txt
 #
-
+import settings
 from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_server import SOCKS5ServerProtocol
 
 
 class ShadowsocksSOCKS5ServerProtocol(SOCKS5ServerProtocol):
-    def __init__(self, loop, remote_server_host:str, remote_server_port:int):
+    def __init__(self, loop, remote_server_host: str = None, remote_server_port: int = None):
         super(ShadowsocksSOCKS5ServerProtocol, self).__init__(loop)
-        self.remote_server_host = remote_server_host
-        self.remote_server_port = remote_server_port
+
+        self.remote_server_host = remote_server_host or settings.remote_host
+        self.remote_server_port = remote_server_port or settings.remote_port
 
         self.target_addr_header = None
 
