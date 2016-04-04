@@ -11,32 +11,32 @@ import asyncio
 from abc import abstractmethod, ABCMeta
 from config import PROTO_LOG
 from packet.packet_header import PacketHeader
-from protocal.client_relay_protocal import ClientRelayProtocol
-from protocal.shadowsocks.header import ShadowsocksPacketHeader
+from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
 
 class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
     def __init__(self, loop):
         super(ServerRelayProtocol, self).__init__()
-        self.unpacker = self.create_unpacker()
-        self.packer = self.create_packer()
 
         self.loop = loop
         self.transport = None
         self.client = None
         self.out_data_buffer = b''
 
-    @abstractmethod
-    def create_packer(self):
-        return None
+        self.decoder = self.create_decoder()
+        self.encoder = self.create_encoder()
 
     @abstractmethod
-    def create_unpacker(self):
-        return None
+    def create_encoder(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def create_decoder(self):
+        raise NotImplementedError()
 
     @abstractmethod
     def get_relay_protocal(self):
-        return ClientRelayProtocol
+        return SimpleClientRelayProtocol
 
     def connection_made(self, transport):
         peername = transport.get_extra_info('peername')
@@ -44,7 +44,7 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
         self.transport = transport
 
     @asyncio.coroutine
-    def send_data_to_remote(self, header, data):
+    def send_data_to_remote(self, data):
         if not self.client:
             PROTO_LOG.warn('send data before connection setup!')
             return
@@ -54,7 +54,7 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
                 self.client.transport.get_extra_info('peername'))
             )
         else:
-            self.client.send_data(header, data)
+            self.client.send_data(data)
 
     @asyncio.coroutine
     def set_up_relay(self, addr: str, port: int):
@@ -66,24 +66,25 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
                 addr,
                 port)
             PROTO_LOG.info('Connection to {}'.format(self.client.transport.get_extra_info('peername')))
+            return self.client.transport.get_extra_info('peername')
+
         else:
             PROTO_LOG.warn('client(%s) alreader exist!', self.client.__repr__)
+            return self.client.transport.get_extra_info('peername')
 
-    @abstractmethod
-    def data_received_from_remote(self, header: PacketHeader, data: bytes):
+    def data_received_from_remote(self, data: bytes):
         """You can add your header before header"""
-        if header:
-            data = header.to_bytes() + data
-
-        encoded_data = self.packer.pack(header=None, data=data)
-        self.transport.write(encoded_data)
+        if self.encoder:
+            data = self.encoder.encode(data)
+        self.transport.write(data)
 
     @abstractmethod
     def data_received(self, data):
-        _, raw_data = self.unpacker.unpack(header=None, data=data)
+        if self.decoder:
+            data = self.decoder.decode(data)
 
         if self.client:
-            asyncio.Task(self.send_data_to_remote(None, raw_data), loop=self.loop)
+            asyncio.Task(self.send_data_to_remote(data), loop=self.loop)
         else:
             asyncio.Task(self.set_up_relay('example.com', 80), loop=self.loop)
 
