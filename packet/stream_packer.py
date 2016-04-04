@@ -13,9 +13,7 @@ from packet.packet_header import PacketHeader
 class StreamPacker(object):
     """used by stream protocal like TCP"""
 
-    def __init__(self, encoder: DataEncoder = None):
-        self.data_encoder = encoder
-
+    def __init__(self):
         # counter bytes for later use
         self.in_bytes = 0
         self.out_bytes = 0
@@ -35,8 +33,6 @@ class StreamPacker(object):
         if len(encoded_data) > 0:
             self.in_bytes += len(encoded_data)
 
-        if self.data_encoder:
-            encoded_data = self.data_encoder.encode(encoded_data)
 
         self.out_bytes += len(encoded_data)
         return encoded_data
@@ -44,10 +40,9 @@ class StreamPacker(object):
     def unpack(self, header:PacketHeader=None, data=None):
         """return header and raw content"""
         self.in_bytes += len(data)
-        raw_data = self.data_encoder.decode(data)
 
         if header is not None:
-            all_data = self.data_buffer + raw_data
+            all_data = self.data_buffer + data
             try:
                 header_length = header.from_bytes(all_data)
             except ValueError:
@@ -63,7 +58,7 @@ class StreamPacker(object):
                 self.out_bytes += len(all_data)
                 return header, out_data
         else:
-            out_data = self.data_buffer+raw_data
+            out_data = self.data_buffer+data
             self.out_bytes += len(out_data)
             return None, out_data
 
