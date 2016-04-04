@@ -18,7 +18,7 @@ from protocal.shadowsocks.header import ShadowsocksPacketHeader
 from protocal.shadowsocks.server import ShadowsocksServerRelayProtocol
 
 
-class ShadowsocksTCPServerTest(unittest.TestCase):
+class ShadowsocksServerTest(unittest.TestCase):
     def test_data_relay(self):
         # Create a pair of connected sockets
         lsock, rsock = socketpair()
@@ -28,19 +28,18 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
         connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
-        packer = StreamPacker(
-            encoder=ShadowsocksEncryptionWrapperEncoder(
-                encrypt_method=config.cipher_method,
-                password=config.password,
-                encript_mode=True),
-        )
+        encoder = encoder = ShadowsocksEncryptionWrapperEncoder(
+            encrypt_method=config.cipher_method,
+            password=config.password,
+            encript_mode=True)
 
-        unpacker = StreamPacker(
-            encoder=ShadowsocksEncryptionWrapperEncoder(
-                encrypt_method=config.cipher_method,
-                password=config.password,
-                encript_mode=False),
-        )
+        decoder = ShadowsocksEncryptionWrapperEncoder(
+            encrypt_method=config.cipher_method,
+            password=config.password,
+            encript_mode=False)
+
+        packer = StreamPacker()
+
 
         protocol.loop = loop
         header = ShadowsocksPacketHeader(addr='example.com', port=80, addr_type=constants.SOCKS5_ADDRTYPE_HOST)
@@ -48,6 +47,7 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
 
         # Simulate the reception of data from the network
         encoded_data = packer.pack(header=header, data=http_request_content)
+        encoded_data = encoder.encode(encoded_data)
         loop.call_soon(rsock.send, encoded_data)
 
         def reader():
@@ -55,7 +55,8 @@ class ShadowsocksTCPServerTest(unittest.TestCase):
             if not data or len(data) == 0:
                 return
 
-            _, http_response_content = unpacker.unpack(data=data, header=None)
+            data = decoder.decode(data)
+            _, http_response_content = packer.unpack(data=data, header=None)
             self.assertEqual(http_response_content[:4], b'HTTP')
             # We are done: unregister the file descriptor
             loop.remove_reader(rsock)

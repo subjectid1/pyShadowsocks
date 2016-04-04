@@ -9,11 +9,10 @@
 #
 import asyncio
 
-
 import config
-from packet.packet_header import PacketHeader
 from packet.stream_packer import StreamPacker
-from protocal.server_relay_protocal import ServerRelayProtocol
+from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
+from protocal.COMMON.server_relay_protocal import ServerRelayProtocol
 from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocal.shadowsocks.header import ShadowsocksPacketHeader
 
@@ -22,48 +21,45 @@ class ShadowsocksServerRelayProtocol(ServerRelayProtocol):
     def __init__(self, loop):
         super(ShadowsocksServerRelayProtocol, self).__init__(loop)
         self.header = None
+        self.stream_packer = StreamPacker()
 
-    def create_packer(self):
-        return StreamPacker(
-            encoder=ShadowsocksEncryptionWrapperEncoder(
-                encrypt_method=config.cipher_method,
-                password=config.password,
-                encript_mode=True),
-        )
+    def create_encoder(self):
+        return ShadowsocksEncryptionWrapperEncoder(
+            encrypt_method=config.cipher_method,
+            password=config.password,
+            encript_mode=True)
 
-    def create_unpacker(self):
-        return StreamPacker(
-            encoder=ShadowsocksEncryptionWrapperEncoder(
-                encrypt_method=config.cipher_method,
-                password=config.password,
-                encript_mode=False),
-        )
+    def create_decoder(self):
+        return ShadowsocksEncryptionWrapperEncoder(
+            encrypt_method=config.cipher_method,
+            password=config.password,
+            encript_mode=False)
 
     def get_relay_protocal(self):
-        return super(ShadowsocksServerRelayProtocol, self).get_relay_protocal()
-
-    def data_received_from_remote(self, header: PacketHeader, data: bytes):
-        return super(ShadowsocksServerRelayProtocol, self).data_received_from_remote(header, data)
+        return SimpleClientRelayProtocol
 
     def data_received(self, data):
+        if self.decoder:
+            data = self.decoder.decode(data)
+
         if not self.header:
-            self.header, raw_data = self.unpacker.unpack(header=ShadowsocksPacketHeader(), data=data)
+            self.header, data = self.stream_packer.unpack(header=ShadowsocksPacketHeader(), data=data)
             if not self.header:
                 return
         else:
-            _, raw_data = self.unpacker.unpack(header=None, data=data)
-            if not raw_data:
+            _, data = self.stream_packer.unpack(header=None, data=data)
+            if not data:
                 return
 
         if self.client:
             # TODO: inspect the relay client' connection status, try to reconnect if disconn
-            asyncio.ensure_future(self.send_data_to_remote(None, raw_data), loop=self.loop)
+            asyncio.ensure_future(self.send_data_to_remote(data), loop=self.loop)
         else:
-            # TODO: run two task one by one, using the simplier styly
+            # TODO: run two task one by one, using the simplier style
             f = asyncio.ensure_future(self.set_up_relay(self.header.addr, self.header.port), loop=self.loop)
 
             def send_data(_):
-                asyncio.ensure_future(self.send_data_to_remote(None, raw_data), loop=self.loop)
+                asyncio.ensure_future(self.send_data_to_remote(data), loop=self.loop)
 
             f.add_done_callback(send_data)
 
