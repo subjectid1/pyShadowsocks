@@ -11,9 +11,10 @@ import logging
 from util.log import get_logger
 
 PROTO_LOG = get_logger('protocal', logging.INFO)
+CONFIG_LOG = get_logger('config', logging.INFO)
+CONFIG_FILES = ['/etc/pyshadowsocks.ini', '~/.pyshadowsocks.ini', './pyshadowsocks.ini']
 
-
-password = ''
-cipher_method='aes-256-cfb'
+protocal = 'shadowsocks'
+password = 'O3O4O5O6'
+cipher_method = 'aes-256-cfb'
 ota_enabled = False
-
