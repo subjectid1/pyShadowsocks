@@ -6,24 +6,19 @@
 # Info:
 #
 #
-import asyncio
 from typing import Callable
 
-from packet.packet_header import PacketHeader
+from protocal.COMMON.base_protocal import BaseProtocol
 
 
-class SimpleClientRelayProtocol(asyncio.Protocol):
+class SimpleClientRelayProtocol(BaseProtocol):
     def __init__(self, data_callback: Callable[[bytes], None], conn_lost_callback):
         super(SimpleClientRelayProtocol, self).__init__()
         self.data_callback = data_callback
         self.conn_lost_callback = conn_lost_callback
-        self.transport = None
 
     def send_data(self, data: bytes):
         return self.transport.write(data)
-
-    def connection_made(self, transport):
-        self.transport = transport
 
     def data_received(self, data):
         self.data_callback(data)

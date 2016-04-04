@@ -10,16 +10,14 @@ import asyncio
 
 from abc import abstractmethod, ABCMeta
 from config import PROTO_LOG
-from packet.packet_header import PacketHeader
+from protocal.COMMON.base_protocal import BaseServerProtocal
 from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
 
-class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
+class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
     def __init__(self, loop):
-        super(ServerRelayProtocol, self).__init__()
+        super(ServerRelayProtocol, self).__init__(loop)
 
-        self.loop = loop
-        self.transport = None
         self.client = None
         self.out_data_buffer = b''
 
@@ -37,11 +35,6 @@ class ServerRelayProtocol(asyncio.Protocol, metaclass=ABCMeta):
     @abstractmethod
     def get_relay_protocal(self):
         return SimpleClientRelayProtocol
-
-    def connection_made(self, transport):
-        peername = transport.get_extra_info('peername')
-        PROTO_LOG.info('Connection from {}'.format(peername))
-        self.transport = transport
 
     @asyncio.coroutine
     def send_data_to_remote(self, data):
