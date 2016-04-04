@@ -6,10 +6,9 @@
 # Info:
 #
 
-import os.path
-import sys
 import configparser
 
+import os.path
 import settings
 
 
