@@ -15,4 +15,5 @@ PROTO_LOG = get_logger('protocal', logging.INFO)
 
 password = ''
 cipher_method='aes-256-cfb'
+ota_enabled = False
 
