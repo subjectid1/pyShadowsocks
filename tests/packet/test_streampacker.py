@@ -39,12 +39,8 @@ class DummyEncoder(DataEncoder):
 
 class StreamPackerTest(unittest.TestCase):
     def test_StreamPacker_pack_and_unpack(self):
-        packer = StreamPacker(
-            encoder=DummyEncoder(),
-        )
-        unpacker = StreamPacker(
-            encoder=DummyEncoder(),
-        )
+        packer = StreamPacker()
+        unpacker = StreamPacker()
 
         data_header = b'X'
         data1 = os.urandom(30)
