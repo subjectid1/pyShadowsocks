@@ -45,7 +45,7 @@ class Socks5AddrHeader(PacketHeader):
         """
         addr_length, addrtype, dest_addr = self._unpack_addr_from(data)
         if len(data[addr_length:]) < 2:
-            raise ValueError()
+            raise ValueError('not egnough data for PORT')
 
         self.port, = struct.unpack_from('>H', data, addr_length)
         self.addr_type = addrtype
@@ -103,7 +103,7 @@ class Socks5AddrHeader(PacketHeader):
             else:
                 raise exception_when_no_enough_data
         else:
-            raise IOError('unsupported addrtype %d, maybe wrong password or '
+            raise ValueError('unsupported addrtype %d, maybe wrong password or '
                           'encryption method' % addr_type)
 
         return addr_length, addr_type, dest_addr
