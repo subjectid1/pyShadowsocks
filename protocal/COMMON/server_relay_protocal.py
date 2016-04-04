@@ -19,7 +19,6 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
         super(ServerRelayProtocol, self).__init__(loop)
 
         self.client = None
-        self.out_data_buffer = b''
 
         self.decoder = self.create_decoder()
         self.encoder = self.create_encoder()
