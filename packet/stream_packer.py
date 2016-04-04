@@ -11,7 +11,7 @@ from packet.packet_header import PacketHeader
 
 
 class StreamPacker(object):
-    """used by stream protocal like TCP"""
+    """used by stream protocol like TCP"""
 
     def __init__(self):
         # counter bytes for later use

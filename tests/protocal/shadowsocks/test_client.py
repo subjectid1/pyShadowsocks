@@ -11,9 +11,9 @@ import unittest
 from socket import socketpair
 
 import constants
-from protocal.shadowsocks.client import ShadowsocksClientRelayProtocol
-from protocal.shadowsocks.header import ShadowsocksPacketHeader
-from protocal.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
+from protocol.shadowsocks.header import ShadowsocksPacketHeader
+from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
 
 
 class ShadowsocksClientTest(unittest.TestCase):

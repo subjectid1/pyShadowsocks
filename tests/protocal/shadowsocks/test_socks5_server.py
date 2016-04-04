@@ -10,9 +10,9 @@ import asyncio
 import unittest
 from socket import socketpair
 
-from protocal.shadowsocks.server import ShadowsocksServerRelayProtocol
-from protocal.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
-from protocal.socks5.socks5_client import SOCKS5ConnectProtocol
+from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
+from protocol.socks5.socks5_client import SOCKS5ConnectProtocol
 
 
 class ShadowsocksSOCKS5ServerTest(unittest.TestCase):

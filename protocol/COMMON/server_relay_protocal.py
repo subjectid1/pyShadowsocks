@@ -10,8 +10,8 @@ import asyncio
 
 from abc import abstractmethod, ABCMeta
 from settings import PROTO_LOG
-from protocal.COMMON.base_protocal import BaseServerProtocal
-from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
+from protocol.COMMON.base_protocal import BaseServerProtocal
+from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
 
 class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):

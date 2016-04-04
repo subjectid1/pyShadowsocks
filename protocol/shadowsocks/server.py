@@ -11,10 +11,10 @@ import asyncio
 
 import settings
 from packet.stream_packer import StreamPacker
-from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
-from protocal.COMMON.server_relay_protocal import ServerRelayProtocol
-from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
-from protocal.shadowsocks.header import ShadowsocksPacketHeader
+from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
+from protocol.COMMON.server_relay_protocal import ServerRelayProtocol
+from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
+from protocol.shadowsocks.header import ShadowsocksPacketHeader
 
 
 class ShadowsocksServerRelayProtocol(ServerRelayProtocol):

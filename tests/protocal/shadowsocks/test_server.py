@@ -13,9 +13,9 @@ from socket import socketpair
 import settings
 import constants
 from packet.stream_packer import StreamPacker
-from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
-from protocal.shadowsocks.header import ShadowsocksPacketHeader
-from protocal.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
+from protocol.shadowsocks.header import ShadowsocksPacketHeader
+from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
 
 
 class ShadowsocksServerTest(unittest.TestCase):

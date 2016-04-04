@@ -8,7 +8,7 @@
 #
 from typing import Callable
 
-from protocal.COMMON.base_protocal import BaseProtocol
+from protocol.COMMON.base_protocal import BaseProtocol
 
 
 class SimpleClientRelayProtocol(BaseProtocol):

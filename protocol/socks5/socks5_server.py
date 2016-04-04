@@ -9,10 +9,10 @@
 #
 import asyncio
 
-from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
-from protocal.COMMON.server_relay_protocal import ServerRelayProtocol
-from protocal.socks5.header import Socks5AddrHeader
-from protocal.socks5.socks5_processor import Socks5Processor
+from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
+from protocol.COMMON.server_relay_protocal import ServerRelayProtocol
+from protocol.socks5.header import Socks5AddrHeader
+from protocol.socks5.socks5_processor import Socks5Processor
 
 
 class SOCKS5ServerProtocol(ServerRelayProtocol):

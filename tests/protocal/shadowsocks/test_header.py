@@ -10,7 +10,7 @@ import socket
 import unittest
 
 import constants
-from protocal.shadowsocks.header import ShadowsocksPacketHeader
+from protocol.shadowsocks.header import ShadowsocksPacketHeader
 
 
 class HeaderTest(unittest.TestCase):

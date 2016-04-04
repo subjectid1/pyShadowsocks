@@ -10,7 +10,7 @@ from abc import abstractmethod
 from typing import Callable
 
 from packet.packet_header import PacketHeader
-from protocal.COMMON.client_relay_protocal import SimpleClientRelayProtocol
+from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
 
 class CommonClientRelayProtocal(SimpleClientRelayProtocol):

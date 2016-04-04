@@ -8,8 +8,8 @@
 #
 
 import settings
-from protocal.COMMON.common_relay_protocal import CommonClientRelayProtocal
-from protocal.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
+from protocol.COMMON.common_relay_protocal import CommonClientRelayProtocal
+from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 
 
 class ShadowsocksClientRelayProtocol(CommonClientRelayProtocal):

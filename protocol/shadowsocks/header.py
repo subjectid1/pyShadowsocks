@@ -7,7 +7,7 @@
 #
 #
 
-from protocal.socks5.header import Socks5AddrHeader
+from protocol.socks5.header import Socks5AddrHeader
 
 
 class ShadowsocksPacketHeader(Socks5AddrHeader):

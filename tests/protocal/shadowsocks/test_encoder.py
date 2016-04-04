@@ -10,7 +10,7 @@ import unittest
 import encrypt
 import os
 import random
-from protocal.shadowsocks.encoder import EVP_BytesToKey, ShadowsocksEncryptionWrapperEncoder
+from protocol.shadowsocks.encoder import EVP_BytesToKey, ShadowsocksEncryptionWrapperEncoder
 
 
 class ShadowsocksCipherTest(unittest.TestCase):

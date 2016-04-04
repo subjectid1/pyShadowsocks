@@ -12,8 +12,8 @@ import settings
 import constants
 from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_RELAY, STRUCT_BBB, SOCKS5_VERSION, \
     SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED, STAGE_SOCKS5_REQUEST
-from protocal.COMMON.base_protocal import BaseProtocol
-from protocal.socks5.header import Socks5AddrHeader
+from protocol.COMMON.base_protocal import BaseProtocol
+from protocol.socks5.header import Socks5AddrHeader
 from util.address import what_type_of_the_address
 
 

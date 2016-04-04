@@ -10,8 +10,8 @@ import asyncio
 import unittest
 from socket import socketpair
 
-from protocal.socks5.socks5_client import SOCKS5ConnectProtocol
-from protocal.socks5.socks5_server import SOCKS5ServerProtocol
+from protocol.socks5.socks5_client import SOCKS5ConnectProtocol
+from protocol.socks5.socks5_server import SOCKS5ServerProtocol
 
 
 class SOCKS5ServerTest(unittest.TestCase):

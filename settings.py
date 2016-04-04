@@ -10,7 +10,7 @@ import logging
 
 from util.log import get_logger
 
-PROTO_LOG = get_logger('protocal', logging.INFO)
+PROTO_LOG = get_logger('protocol', logging.INFO)
 CONFIG_LOG = get_logger('config', logging.INFO)
 CONFIG_FILES = ['/etc/pyshadowsocks.ini', '~/.pyshadowsocks.ini', './pyshadowsocks.ini']
 

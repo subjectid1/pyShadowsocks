@@ -6,9 +6,9 @@
 # Info: https://www.ietf.org/rfc/rfc1928.txt
 #
 
-from protocal.shadowsocks.client import ShadowsocksClientRelayProtocol
-from protocal.socks5.header import Socks5AddrHeader
-from protocal.socks5.socks5_server import SOCKS5ServerProtocol
+from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
+from protocol.socks5.header import Socks5AddrHeader
+from protocol.socks5.socks5_server import SOCKS5ServerProtocol
 
 
 class ShadowsocksSOCKS5ServerProtocol(SOCKS5ServerProtocol):
