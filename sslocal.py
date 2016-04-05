@@ -10,6 +10,7 @@ import asyncio
 
 import constants
 import settings
+from pac.http_server import FakeHTTPGetProtocol
 from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
 from util.config import parse_args
 
@@ -26,4 +27,8 @@ if __name__ == '__main__':
             settings.listen_port)
 
         server = loop.run_until_complete(coro)
+
+        coro = loop.create_server(FakeHTTPGetProtocol, '127.0.0.1', 8080)
+        server = loop.run_until_complete(coro)
+
         loop.run_forever()
