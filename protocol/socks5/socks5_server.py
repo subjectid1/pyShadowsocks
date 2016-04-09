@@ -8,6 +8,7 @@
 #                - relay in data_received: https://stackoverflow.com/questions/21295068/how-can-i-create-a-relay-server-using-tulip-asyncio-in-python/21297354#21297354
 #
 import asyncio
+from argparse import Namespace
 
 from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 from protocol.COMMON.server_relay_protocal import ServerRelayProtocol
@@ -16,8 +17,8 @@ from protocol.socks5.socks5_processor import Socks5Processor
 
 
 class SOCKS5ServerProtocol(ServerRelayProtocol):
-    def __init__(self, loop):
-        super(SOCKS5ServerProtocol, self).__init__(loop)
+    def __init__(self, loop, config: Namespace = None):
+        super(SOCKS5ServerProtocol, self).__init__(loop, config)
         self.sock5_processor = None
 
     def create_encoder(self):
@@ -27,7 +28,7 @@ class SOCKS5ServerProtocol(ServerRelayProtocol):
         return None
 
     def get_relay_protocal(self):
-        return SimpleClientRelayProtocol
+        return super(SOCKS5ServerProtocol, self).get_relay_protocal()
 
     async def connect_to_addr(self, addr: Socks5AddrHeader):
         remote_addr, remote_port = await self.set_up_relay(addr.addr, addr.port)

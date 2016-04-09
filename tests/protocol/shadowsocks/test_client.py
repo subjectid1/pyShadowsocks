@@ -8,9 +8,11 @@
 #
 import asyncio
 import unittest
+from argparse import Namespace
 from socket import socketpair
 
 import constants
+import encrypt
 from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
 from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
@@ -22,8 +24,11 @@ class ShadowsocksClientTest(unittest.TestCase):
         lsock, rsock = socketpair()
         loop = asyncio.get_event_loop()
 
+        _args = {constants.ARG_CIPHER_METHOD: encrypt.CRYPTO_AES_256_CFB, constants.ARG_PASSWORD: '123456'}
+        config = Namespace(**_args)
+
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop), sock=rsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop, config), sock=rsock)
         _, server_protocol = loop.run_until_complete(connect_coro)
 
         def data_callback(data):
@@ -37,7 +42,7 @@ class ShadowsocksClientTest(unittest.TestCase):
             pass
 
         connect_coro = loop.create_connection(
-            lambda: ShadowsocksClientRelayProtocol(data_callback, conn_lost_callback), sock=lsock)
+            lambda: ShadowsocksClientRelayProtocol(data_callback, conn_lost_callback, config), sock=lsock)
 
         _, client_protocol = loop.run_until_complete(connect_coro)
 

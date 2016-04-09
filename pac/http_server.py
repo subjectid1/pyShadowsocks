@@ -7,7 +7,6 @@
 #
 #
 import os.path
-
 from protocol.COMMON.base_protocal import BaseProtocol
 
 

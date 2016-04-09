@@ -9,12 +9,12 @@
 import asyncio
 from typing import Callable, Tuple
 
-import settings
 import constants
+import settings
 from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_SOCKS5_REQUEST, STAGE_SOCKS5_UDP_ASSOCIATE, STAGE_RELAY, \
     STRUCT_BBB, STRUCT_BB, STRUCT_B, STRUCT_SOCK5_REPLY
 from protocol.socks5.header import Socks5AddrHeader
-from util.address import what_type_of_the_address
+from util.net.address import what_type_of_the_address
 
 
 class Socks5Processor(object):
@@ -131,6 +131,19 @@ class Socks5Processor(object):
                     #
                     #
                     remote_addr, remote_port = future.result()
+                    if remote_addr is None:
+                        response_data = STRUCT_SOCK5_REPLY.pack(constants.SOCKS5_VERSION,
+                                                                constants.SOCKS5_REPLY_NETWORK_UNREACHABLE,
+                                                                constants.SOCKS5_RESERVED_BYTE,
+                                                                constants.SOCKS5_ADDRTYPE_IPV4,
+                                                                0,
+                                                                0,
+                                                                )
+                        self.transport.write(response_data)
+                        self.transport.close()
+                        return False
+
+
                     addr = Socks5AddrHeader()
                     addr.addr = remote_addr
                     addr.port = remote_port

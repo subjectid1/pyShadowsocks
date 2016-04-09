@@ -8,7 +8,9 @@
 #                - relay in data_received: https://stackoverflow.com/questions/21295068/how-can-i-create-a-relay-server-using-tulip-asyncio-in-python/21297354#21297354
 #
 import asyncio
+from argparse import Namespace
 
+import functools
 import settings
 from packet.stream_packer import StreamPacker
 from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
@@ -18,25 +20,26 @@ from protocol.shadowsocks.header import ShadowsocksPacketHeader
 
 
 class ShadowsocksServerRelayProtocol(ServerRelayProtocol):
-    def __init__(self, loop):
-        super(ShadowsocksServerRelayProtocol, self).__init__(loop)
+    def __init__(self, loop, config: Namespace = None):
+        super(ShadowsocksServerRelayProtocol, self).__init__(loop, config)
         self.header = None
         self.stream_packer = StreamPacker()
 
     def create_encoder(self):
         return ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=settings.cipher_method,
-            password=settings.password,
+            encrypt_method=self.config.cipher_method,
+            password=self.config.password,
             encript_mode=True)
 
     def create_decoder(self):
         return ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=settings.cipher_method,
-            password=settings.password,
+            encrypt_method=self.config.cipher_method,
+            password=self.config.password,
             encript_mode=False)
 
     def get_relay_protocal(self):
-        return SimpleClientRelayProtocol
+        return SimpleClientRelayProtocol(functools.partial(self.data_received_from_remote),
+                                         self.connection_lost_from_remote)
 
     def data_received(self, data):
         if self.decoder:

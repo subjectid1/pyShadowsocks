@@ -14,7 +14,6 @@ import settings
 class BaseProtocol(asyncio.Protocol):
     def __init__(self):
         super(BaseProtocol, self).__init__()
-
         self.transport = None
 
     def connection_made(self, transport):

@@ -5,23 +5,27 @@
 #
 # Info: https://www.ietf.org/rfc/rfc1928.txt
 #
-import settings
+from argparse import Namespace
+
+import functools
 from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_server import SOCKS5ServerProtocol
 
 
 class ShadowsocksSOCKS5ServerProtocol(SOCKS5ServerProtocol):
-    def __init__(self, loop, remote_server_host: str = None, remote_server_port: int = None):
-        super(ShadowsocksSOCKS5ServerProtocol, self).__init__(loop)
+    def __init__(self, loop, config: Namespace = None):
+        super(ShadowsocksSOCKS5ServerProtocol, self).__init__(loop, config)
 
-        self.remote_server_host = remote_server_host or settings.remote_host
-        self.remote_server_port = remote_server_port or settings.remote_port
+        self.remote_server_host = self.config.remote_host
+        self.remote_server_port = self.config.remote_port
 
         self.target_addr_header = None
 
     def get_relay_protocal(self):
-        return ShadowsocksClientRelayProtocol
+        return ShadowsocksClientRelayProtocol(functools.partial(self.data_received_from_remote),
+                                              self.connection_lost_from_remote,
+                                              self.config)
 
     async def connect_to_addr(self, addr: Socks5AddrHeader):
         remote_addr, remote_port = await self.set_up_relay(self.remote_server_host, self.remote_server_port)

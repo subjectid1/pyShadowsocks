@@ -8,10 +8,11 @@
 #
 import asyncio
 import unittest
+from argparse import Namespace
 from socket import socketpair
 
-import settings
 import constants
+import encrypt
 from packet.stream_packer import StreamPacker
 from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
@@ -24,18 +25,24 @@ class ShadowsocksServerTest(unittest.TestCase):
         lsock, rsock = socketpair()
         loop = asyncio.get_event_loop()
 
+        _args = {constants.ARG_CIPHER_METHOD: encrypt.CRYPTO_AES_256_CFB, constants.ARG_PASSWORD: '123456'}
+        config = Namespace(**_args)
+
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop), sock=lsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop, config), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
+        cipher_method = encrypt.CRYPTO_AES_256_CFB
+        password = '123456'
+
         encoder = encoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=settings.cipher_method,
-            password=settings.password,
+            encrypt_method=cipher_method,
+            password=password,
             encript_mode=True)
 
         decoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=settings.cipher_method,
-            password=settings.password,
+            encrypt_method=cipher_method,
+            password=password,
             encript_mode=False)
 
         packer = StreamPacker()

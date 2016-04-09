@@ -9,7 +9,6 @@ import argparse
 import configparser
 
 import constants
-import encrypt
 import os.path
 import settings
 
@@ -31,22 +30,23 @@ def get_config():
     return None
 
 
-def parse_args(is_local=True, args=None):
-    parser = argparse.ArgumentParser(description='This program implement the shadowsocks protocol.')
-    if is_local:
-        parser.add_argument('--remote_host', dest='remote_host', required=True, help='remote host')
-        parser.add_argument('--remote_port', dest='remote_port', type=int, required=True, help='remote port')
-        parser.add_argument('--listen_port', dest='listen_port', required=False, type=int, default=1080,
-                            help='local port')
-    else:
-        parser.add_argument('--listen_port', dest='listen_port', required=True, type=int, help='local port')
+def parse_args_new(args=None):
+    def add_argument(parser, mode, arg):
+        parser.add_argument('--' + arg, dest=arg, **constants.ARUMENTS_FOR_ADD_PARSER[mode][arg])
 
-    parser.add_argument('--protocol', dest='protocol', required=True, default=constants.PROTOCOL_SHADOWSOCKS,
-                        choices=[constants.PROTOCOL_SHADOWSOCKS], help='proxy solusion.')
-    parser.add_argument('--password', dest='password', required=True)
-    parser.add_argument('--cipher_method', dest='cipher_method', choices=encrypt.SymmetricEncryptions,
-                        required=True)
-    parser.add_argument('--ota_enabled', dest='ota_enabled', required=False, default=False)
+    parser = argparse.ArgumentParser(description='This program implement the shadowsocks protocol.',
+                                     add_help='ss {local,remote} {shadowsocks,socks5_ssl}')
+    sub_parsers = parser.add_subparsers(help='{local/remote} help', dest=constants.ARG_SERVER_MODE)
+    for server_mode in constants.ARG_MAP_FOR_SERVER_MODE:
+        server_parser = sub_parsers.add_parser(server_mode)
+        for arg in constants.ARG_MAP_FOR_SERVER_MODE[server_mode]:
+            add_argument(server_parser, server_mode, arg)
+
+        sub_parsers_for_protocol = server_parser.add_subparsers(dest=constants.ARG_PROTOCOL_MODE)
+        for protocal_mode in constants.ARG_MAP_FOR_PROTOCOL_MODE:
+            protocol_parser = sub_parsers_for_protocol.add_parser(protocal_mode)
+            for arg in constants.ARG_MAP_FOR_PROTOCOL_MODE[protocal_mode]:
+                add_argument(protocol_parser, protocal_mode, arg)
 
     args = parser.parse_args(args=args)
-    return vars(args)
+    return args

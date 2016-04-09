@@ -7,7 +7,9 @@
 #
 
 import asyncio
+from argparse import Namespace
 
+import functools
 from abc import abstractmethod, ABCMeta
 from settings import PROTO_LOG
 from protocol.COMMON.base_protocal import BaseServerProtocal
@@ -15,10 +17,11 @@ from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
 
 class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
-    def __init__(self, loop):
+    def __init__(self, loop, config: Namespace = None):
         super(ServerRelayProtocol, self).__init__(loop)
 
         self.client = None
+        self.config = config
 
         self.decoder = self.create_decoder()
         self.encoder = self.create_encoder()
@@ -33,7 +36,8 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
 
     @abstractmethod
     def get_relay_protocal(self):
-        return SimpleClientRelayProtocol
+        return SimpleClientRelayProtocol(functools.partial(self.data_received_from_remote),
+                                         self.connection_lost_from_remote)
 
     @asyncio.coroutine
     def send_data_to_remote(self, data):
@@ -52,13 +56,18 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
     def set_up_relay(self, addr: str, port: int):
         if not self.client:
             assert (addr is not None and port is not None)
-            _, self.client = yield from self.loop.create_connection(
-                lambda: self.get_relay_protocal()(self.data_received_from_remote,
-                                                  self.connection_lost_from_remote),
-                addr,
-                port)
-            PROTO_LOG.info('Connection to {}'.format(self.client.transport.get_extra_info('peername')))
-            return self.client.transport.get_extra_info('peername')
+            try:
+                client = self.get_relay_protocal()
+                _, self.client = yield from self.loop.create_connection(
+                    lambda: client,
+                    addr,
+                    port)
+            except ConnectionError:
+                PROTO_LOG.exception('Fail to set up connection to %s:%d', addr, port)
+                return None, None
+            else:
+                PROTO_LOG.info('Connection to {}'.format(self.client.transport.get_extra_info('peername')))
+                return self.client.transport.get_extra_info('peername')
 
         else:
             PROTO_LOG.warn('client(%s) alreader exist!', self.client.__repr__)

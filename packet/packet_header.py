@@ -6,33 +6,13 @@
 # Info:
 #
 #
+#
 from abc import abstractmethod, ABCMeta
-from typing import Dict
 
-class PacketHeader(Dict, metaclass=ABCMeta):
-    ValidFields = []
+from util.collections.fixed_dict import FixedDict
 
-    def __setitem__(self, key, value):
-        if key in self.ValidFields:
-            return super(PacketHeader, self).__setitem__(key, value)
-        else:
-            raise KeyError
 
-    def __getitem__(self, item):
-        try:
-            return super(PacketHeader, self).__getitem__(item)
-        except KeyError:
-            if item in self.ValidFields:
-                return None
-            else:
-                raise
-
-    def __setattr__(self, key, value):
-        return self.__setitem__(key, value)
-
-    def __getattr__(self, item):
-        return self.__getitem__(item)
-
+class PacketHeader(FixedDict, metaclass=ABCMeta):
     @abstractmethod
     def to_bytes(self):
         pass
@@ -40,4 +20,3 @@ class PacketHeader(Dict, metaclass=ABCMeta):
     @abstractmethod
     def from_bytes(self, data):
         pass
-

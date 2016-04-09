@@ -6,12 +6,12 @@
 # Info:
 #
 #
+import encrypt
 import struct
 
 ONETIMEAUTH_BYTES = 10
 ONETIMEAUTH_CHUNK_BYTES = 12
 ONETIMEAUTH_CHUNK_DATA_LEN = 2
-
 
 ADDRTYPE_AUTH = 0x10
 ADDRTYPE_MASK = 0xF
@@ -60,7 +60,53 @@ STRUCT_B = struct.Struct('>B')
 STRUCT_SOCK5_REQUEST = struct.Struct('>BBBBIH')
 STRUCT_SOCK5_REPLY = STRUCT_SOCK5_REQUEST
 
-
 ERROR_MSG_NOT_ENOUGHT_DATA_FOR = 'not enought data for {}'
 
 PROTOCOL_SHADOWSOCKS = 'shadowsocks'
+PROTOCOL_SOCKS5OVERSSL = 'socks5_ssl'
+
+#############################For argument parsing #######################################
+### args for server
+ARG_SERVER_MODE = 'server_mode'
+ARG_LOCAL_SERVER = 'local'
+ARG_REMOTE_SERVER = 'remote'
+
+ARG_LISTEN_PORT = 'listen_port'
+ARG_REMOTE_HOST = 'remote_host'
+ARG_REMOTE_PORT = 'remote_port'
+
+ARG_MAP_FOR_SERVER_MODE = {
+    ARG_LOCAL_SERVER: [ARG_LISTEN_PORT, ARG_REMOTE_HOST, ARG_REMOTE_PORT],
+    ARG_REMOTE_SERVER: [ARG_LISTEN_PORT],
+}
+
+### args for protocal
+ARG_PROTOCOL_MODE = 'protocol_mode'
+ARG_PROTOCOL_SHADOWSOCKS = PROTOCOL_SHADOWSOCKS
+ARG_PROTOCOL_SOCKS5OVERSSL = PROTOCOL_SOCKS5OVERSSL
+
+ARG_PASSWORD = 'password'
+ARG_CIPHER_METHOD = 'cipher_method'
+ARG_OTA_ENABLED = 'ota_enabled'
+
+ARG_MAP_FOR_PROTOCOL_MODE = {
+    ARG_PROTOCOL_SHADOWSOCKS: [ARG_PASSWORD, ARG_CIPHER_METHOD, ARG_OTA_ENABLED],
+    # ARG_PROTOCOL_SOCKS5OVERSSL: [ARG_PASSWORD, ARG_CIPHER_METHOD],
+}
+
+### argparse.parser.add_parser arguments for modes
+ARUMENTS_FOR_ADD_PARSER = {
+    ARG_LOCAL_SERVER: {
+        ARG_REMOTE_HOST: {'required': True},
+        ARG_REMOTE_PORT: {'type': int, 'required': True},
+        ARG_LISTEN_PORT: {'type': int, 'required': False, 'default': 1080},
+    },
+    ARG_REMOTE_SERVER: {
+        ARG_LISTEN_PORT: {'type': int, 'required': True},
+    },
+    ARG_PROTOCOL_SHADOWSOCKS: {
+        ARG_PASSWORD: {'required': True},
+        ARG_CIPHER_METHOD: {'choices': encrypt.SymmetricEncryptions, 'required': True},
+        ARG_OTA_ENABLED: {'required': False, 'default': False},
+    }
+}
