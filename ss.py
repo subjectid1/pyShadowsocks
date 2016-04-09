@@ -25,7 +25,7 @@ def main():
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
             coro = loop.create_server(
-                lambda: ShadowsocksSOCKS5ServerProtocol(loop, ns.remote_host, ns.remote_port),
+                lambda: ShadowsocksSOCKS5ServerProtocol(loop, config=ns),
                 '0.0.0.0',
                 ns.listen_port)
             server = loop.run_until_complete(coro)
@@ -38,7 +38,8 @@ def main():
         if ns.protocol_mode == constants.ARG_PROTOCOL_SHADOWSOCKS:
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
-            coro = loop.create_server(lambda: ShadowsocksServerRelayProtocol(loop), '0.0.0.0', ns.listen_port)
+            coro = loop.create_server(lambda: ShadowsocksServerRelayProtocol(loop, config=ns), '0.0.0.0',
+                                      ns.listen_port)
             server = loop.run_until_complete(coro)
             loop.run_forever()
 
