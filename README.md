@@ -1,13 +1,14 @@
 # DESC
 This project implements the [Shadowsocks](https://github.com/shadowsocks/shadowsocks) protocol using python3 and asyncio std library
-since the original project source code is frustrated to extend.
+ since the original project source code is frustrated to extend.
 
 Shadowsocks is a proxy program that listening socks5 protocol on local(socks5 connect/UDP association), 
 forward socks5 data to remote, and then forward the socket to target host. Actually 'socks5 forwarder' is more appropriate
-the named 'shadowsocks'.
+ then the named 'shadowsocks'.
 
 Shadowsocks is mainly used for bypassing GFW(Great Firewall of China), since the data is encrypt and sent over 
-normal TCP/UDP, no session, no handshake, no protocol mark, getting away from packet inspection, it's hard to block.
+normal TCP/UDP, no session, no handshake, no protocol mark, getting away from packet inspection, it's hard to block
+ by firewall.
 
 
 
