@@ -54,6 +54,10 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
 
     @asyncio.coroutine
     def set_up_relay(self, addr: str, port: int):
+        """return
+                None,None if ERROR accur
+                ip, port if succeed
+        """
         if not self.client:
             assert (addr is not None and port is not None)
             try:
@@ -62,7 +66,7 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
                     lambda: client,
                     addr,
                     port)
-            except ConnectionError:
+            except (ConnectionError, TimeoutError):
                 PROTO_LOG.exception('Fail to set up connection to %s:%d', addr, port)
                 return None, None
             else:

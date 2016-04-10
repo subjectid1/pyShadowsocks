@@ -36,6 +36,7 @@ class SOCKS5ServerProtocol(ServerRelayProtocol):
 
     def data_received(self, data):
         if not self.sock5_processor:
+            # if connect error or association fail, Socks5Processor is responsible to close the transport
             self.sock5_processor = Socks5Processor(self.loop, self.transport, self.connect_to_addr)
 
         if not self.sock5_processor.socks_connected():
