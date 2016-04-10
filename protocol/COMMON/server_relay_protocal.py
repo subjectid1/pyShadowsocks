@@ -15,7 +15,6 @@ from settings import PROTO_LOG
 from protocol.COMMON.base_protocal import BaseServerProtocal
 from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
 
-
 class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
     def __init__(self, loop, config: Namespace = None):
         super(ServerRelayProtocol, self).__init__(loop)
@@ -66,7 +65,7 @@ class ServerRelayProtocol(BaseServerProtocal, metaclass=ABCMeta):
                     lambda: client,
                     addr,
                     port)
-            except (ConnectionError, TimeoutError):
+            except (ConnectionError, TimeoutError, OSError):
                 PROTO_LOG.exception('Fail to set up connection to %s:%d', addr, port)
                 return None, None
             else:
