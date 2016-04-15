@@ -11,13 +11,18 @@
 import asyncio
 
 import constants
+import settings
 from pac.http_server import FakeHTTPGetProtocol
 from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
 from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
 from util.config import parse_args_new
+from util.resc import set_open_file_limit_up_to
 
 
 def main():
+    soft, hard = set_open_file_limit_up_to(0xffff)
+    settings.CONFIG_LOG.info('open file limit set to %d:%d', soft, hard)
+
     ns = parse_args_new()
 
     if ns.server_mode == constants.ARG_LOCAL_SERVER:
