@@ -10,7 +10,7 @@ from typing import Callable
 
 import constants
 import settings
-from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_RELAY, STRUCT_BBB, SOCKS5_VERSION, \
+from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_SOCKS5_TCP_RELAY, STRUCT_BBB, SOCKS5_VERSION, \
     SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED, STAGE_SOCKS5_REQUEST
 from protocol.COMMON.base_protocal import BaseProtocol
 from protocol.socks5.header import Socks5AddrHeader
@@ -40,7 +40,7 @@ class SOCKS5ConnectProtocol(BaseProtocol):
         self._send_socks5_method_select_request()
 
     def send_stream(self, data: bytes):
-        if self.state == STAGE_RELAY:
+        if self.state == STAGE_SOCKS5_TCP_RELAY:
             data = self.data_buffer + data
             self.data_buffer = b''
             return self.transport.write(data)
@@ -145,8 +145,8 @@ class SOCKS5ConnectProtocol(BaseProtocol):
         elif self.state == STAGE_SOCKS5_REQUEST:
             ret = self._do_socks5_connect_response(data)
             if ret:
-                self.state = STAGE_RELAY
+                self.state = STAGE_SOCKS5_TCP_RELAY
                 self.connected_callback(self)
 
-        elif self.state == STAGE_RELAY:
+        elif self.state == STAGE_SOCKS5_TCP_RELAY:
             self.data_callback(data)

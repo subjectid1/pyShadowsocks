@@ -50,8 +50,12 @@ STAGE_SOCKS5_METHOD_SELECT = 0
 STAGE_SOCKS5_METHOD_AUTHENTICATION = 1
 STAGE_SOCKS5_REQUEST = 2
 STAGE_SOCKS5_UDP_ASSOCIATE = 5
-STAGE_RELAY = 6
+STAGE_SOCKS5_TCP_RELAY = 6
 STAGE_DESTROYED = -1
+
+SOCKS_SERVER_MODE_TCP_RELAY = 'tcp_relay'
+SOCKS_SERVER_MODE_UDP_RELAY = 'udp_relay'
+
 ##################################################################
 
 STRUCT_BBB = struct.Struct('>BBB')
@@ -71,12 +75,13 @@ ARG_SERVER_MODE = 'server_mode'
 ARG_LOCAL_SERVER = 'local'
 ARG_REMOTE_SERVER = 'remote'
 
+ARG_SOCKS_LISTEN_PORT = 'socks_port'
 ARG_LISTEN_PORT = 'listen_port'
 ARG_REMOTE_HOST = 'remote_host'
 ARG_REMOTE_PORT = 'remote_port'
 
 ARG_MAP_FOR_SERVER_MODE = {
-    ARG_LOCAL_SERVER: [ARG_LISTEN_PORT, ARG_REMOTE_HOST, ARG_REMOTE_PORT],
+    ARG_LOCAL_SERVER: [ARG_SOCKS_LISTEN_PORT, ARG_REMOTE_HOST, ARG_REMOTE_PORT],
     ARG_REMOTE_SERVER: [ARG_LISTEN_PORT],
 }
 
@@ -99,7 +104,7 @@ ARUMENTS_FOR_ADD_PARSER = {
     ARG_LOCAL_SERVER: {
         ARG_REMOTE_HOST: {'required': True},
         ARG_REMOTE_PORT: {'type': int, 'required': True},
-        ARG_LISTEN_PORT: {'type': int, 'required': False, 'default': 1080},
+        ARG_SOCKS_LISTEN_PORT: {'type': int, 'required': False, 'default': 1080},
     },
     ARG_REMOTE_SERVER: {
         ARG_LISTEN_PORT: {'type': int, 'required': True},

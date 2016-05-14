@@ -10,41 +10,51 @@
 import asyncio
 from argparse import Namespace
 
-from protocol.COMMON.client_relay_protocal import SimpleClientRelayProtocol
-from protocol.COMMON.server_relay_protocal import ServerRelayProtocol
+import constants
+import functools
+from protocol.COMMON.server_stream_relay_protocol import ServerStreamRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_processor import Socks5Processor
 
 
-class SOCKS5ServerProtocol(ServerRelayProtocol):
-    def __init__(self, loop, config: Namespace = None):
-        super(SOCKS5ServerProtocol, self).__init__(loop, config)
-        self.sock5_processor = None
+class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
+    def connection_made(self, transport):
+        super(SOCKS5ServerStreamProtocol, self).connection_made(transport)
+        self.sock5_processor = Socks5Processor(self.loop,
+                                               self.transport,
+                                               functools.partial(self.connect_to_addr_tcp),
+                                               functools.partial(self.connect_to_addr_udp))
 
-    def create_encoder(self):
-        return None
+    async def connect_to_addr_tcp(self, addr: Socks5AddrHeader):
+        """
+            In the reply to a CONNECT, BND.PORT contains the port number that the
+            server assigned to connect to the target host, while BND.ADDR
+            contains the associated IP address.
+        """
+        ret = await self.set_up_relay((addr.addr, addr.port))
+        if ret:
+            return True, (self.client.transport.get_extra_info('sockname'))
+        else:
+            return False, (None, None)
 
-    def create_decoder(self):
-        return None
-
-    def get_relay_protocal(self):
-        return super(SOCKS5ServerProtocol, self).get_relay_protocal()
-
-    async def connect_to_addr(self, addr: Socks5AddrHeader):
-        remote_addr, remote_port = await self.set_up_relay(addr.addr, addr.port)
-        return remote_addr, remote_port
+    async def connect_to_addr_udp(self, addr: Socks5AddrHeader):
+        """
+            In the reply to a UDP ASSOCIATE request, the BND.PORT and BND.ADDR
+            fields indicate the port number/address where the client MUST send
+            UDP request messages to be relayed.
+        """
+        return True, ('127.0.0.1', 1080)
 
     def data_received(self, data):
-        if not self.sock5_processor:
-            # if connect error or association fail, Socks5Processor is responsible to close the transport
-            self.sock5_processor = Socks5Processor(self.loop, self.transport, self.connect_to_addr)
-
-        if not self.sock5_processor.socks_connected():
+        if self.sock5_processor.get_state() in [constants.STAGE_SOCKS5_METHOD_SELECT,
+                                                constants.STAGE_SOCKS5_METHOD_AUTHENTICATION,
+                                                constants.STAGE_SOCKS5_REQUEST]:
             self.sock5_processor.do_request(data)
-
-        elif self.sock5_processor.socks_connected():
-
-            asyncio.ensure_future(self.send_data_to_remote(data), loop=self.loop)
+        elif self.sock5_processor.get_state() == constants.STAGE_SOCKS5_TCP_RELAY:
+            asyncio.ensure_future(self.send_data_to_remote(self.client, data), loop=self.loop)
+        elif self.sock5_processor.get_state() == constants.SOCKS_SERVER_MODE_UDP_RELAY:
+            # never goto here
+            self.transport.close()
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ import unittest
 from socket import socketpair
 
 from protocol.socks5.socks5_client import SOCKS5ConnectProtocol
-from protocol.socks5.socks5_server import SOCKS5ServerProtocol
+from protocol.socks5.socks5_server import SOCKS5ServerStreamProtocol
 
 
 class SOCKS5ServerTest(unittest.TestCase):
@@ -21,7 +21,7 @@ class SOCKS5ServerTest(unittest.TestCase):
         loop = asyncio.get_event_loop()
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: SOCKS5ServerProtocol(loop), sock=rsock)
+        connect_coro = loop.create_connection(lambda: SOCKS5ServerStreamProtocol(loop), sock=rsock)
         _, server_protocol = loop.run_until_complete(connect_coro)
 
         def data_callback(data):
