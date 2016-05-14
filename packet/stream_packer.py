@@ -37,7 +37,7 @@ class StreamPacker(object):
         self.out_bytes += len(encoded_data)
         return encoded_data
 
-    def unpack(self, header:PacketHeader=None, data=None):
+    def unpack(self, data, header: PacketHeader = None):
         """return header and raw content"""
         self.in_bytes += len(data)
 
@@ -50,8 +50,7 @@ class StreamPacker(object):
                 self.data_buffer = all_data
                 return None, None
             except Exception as ex:
-                # TODO:do something
-                return None, None
+                raise
             else:
                 self.data_buffer = b''
                 out_data = all_data[header_length:]

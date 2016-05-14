@@ -15,7 +15,7 @@ import constants
 import encrypt
 from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
-from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
 
 
 class ShadowsocksClientTest(unittest.TestCase):
@@ -28,10 +28,10 @@ class ShadowsocksClientTest(unittest.TestCase):
         config = Namespace(**_args)
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop, config), sock=rsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksServerStreamRelayProtocol(loop, config), sock=rsock)
         _, server_protocol = loop.run_until_complete(connect_coro)
 
-        def data_callback(data):
+        def data_callback(client, data):
             self.assertEqual(data[:4], b'HTTP')
             lsock.close()
             rsock.close()

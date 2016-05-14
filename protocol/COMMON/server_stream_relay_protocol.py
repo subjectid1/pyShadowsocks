@@ -26,8 +26,7 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
         return None
 
     @asyncio.coroutine
-    def set_up_relay(self, target_addr, from_addr=None):
-        addr, port = target_addr
+    def set_up_relay(self, addr, port):
         if not self.client:
             assert (addr is not None and port is not None)
             try:

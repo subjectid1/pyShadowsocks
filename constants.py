@@ -18,6 +18,11 @@ ADDRTYPE_MASK = 0xF
 
 TCP_BUF_SIZE = 1024 * 32
 
+## for server relay state
+RELAY_STATE_NOT_CONNECTED = 'not connected'
+RELAY_STATE_CONNECTING = 'connecting'
+RELAY_STATE_CONECTED = 'connected'
+
 ########################## FOR SOCKS5 #######################
 SOCKS5_VERSION = 0x05
 SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED = 0x00

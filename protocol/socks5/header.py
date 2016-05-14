@@ -30,7 +30,7 @@ class Socks5AddrHeader(PacketHeader):
         """pack header to bytes like: | Addr type(0x01) | Addr | Port | """
 
         if not self.is_valid():
-            raise AttributeError
+            raise AttributeError('Invalid Structure')
 
         addr_bytes = self._pack_addr_bytes_from(self.addr_type, self.addr)
         port_bytes = struct.pack('>H', self.port)

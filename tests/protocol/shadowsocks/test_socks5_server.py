@@ -13,7 +13,7 @@ from socket import socketpair
 
 import constants
 import encrypt
-from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
 from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
 from protocol.socks5.socks5_client import SOCKS5ConnectProtocol
 
@@ -35,7 +35,7 @@ class ShadowsocksSOCKS5ServerTest(unittest.TestCase):
                  constants.ARG_LISTEN_PORT: 9002}
         retmote_config = Namespace(**_args)
 
-        coro = loop.create_server(lambda: ShadowsocksServerRelayProtocol(loop, retmote_config),
+        coro = loop.create_server(lambda: ShadowsocksServerStreamRelayProtocol(loop, retmote_config),
                                   '127.0.0.1',
                                   retmote_config.listen_port)
 

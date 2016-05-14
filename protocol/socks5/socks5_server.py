@@ -8,7 +8,6 @@
 #                - relay in data_received: https://stackoverflow.com/questions/21295068/how-can-i-create-a-relay-server-using-tulip-asyncio-in-python/21297354#21297354
 #
 import asyncio
-from argparse import Namespace
 
 import constants
 import functools
@@ -31,7 +30,7 @@ class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
             server assigned to connect to the target host, while BND.ADDR
             contains the associated IP address.
         """
-        ret = await self.set_up_relay((addr.addr, addr.port))
+        ret = await self.set_up_relay(addr.addr, addr.port)
         if ret:
             return True, (self.client.transport.get_extra_info('sockname'))
         else:

@@ -16,7 +16,7 @@ import encrypt
 from packet.stream_packer import StreamPacker
 from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
-from protocol.shadowsocks.server import ShadowsocksServerRelayProtocol
+from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
 
 
 class ShadowsocksServerTest(unittest.TestCase):
@@ -29,7 +29,7 @@ class ShadowsocksServerTest(unittest.TestCase):
         config = Namespace(**_args)
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksServerRelayProtocol(loop, config), sock=lsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksServerStreamRelayProtocol(loop, config), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
         cipher_method = encrypt.CRYPTO_AES_256_CFB
@@ -63,7 +63,7 @@ class ShadowsocksServerTest(unittest.TestCase):
                 return
 
             data = decoder.decode(data)
-            _, http_response_content = packer.unpack(data=data, header=None)
+            _, http_response_content = packer.unpack(data, header=None)
             self.assertEqual(http_response_content[:4], b'HTTP')
             # We are done: unregister the file descriptor
             loop.remove_reader(rsock)

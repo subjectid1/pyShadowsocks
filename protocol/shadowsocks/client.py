@@ -7,11 +7,11 @@
 #                - Transport<https://docs.python.org/3/library/asyncio-protocol.html>
 #
 
-from protocol.COMMON.common_relay_protocal import CommonClientRelayProtocal
+from protocol.COMMON.common_client_relay_protocol import CommonClientRelayProtocol
 from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 
 
-class ShadowsocksClientRelayProtocol(CommonClientRelayProtocal):
+class ShadowsocksClientRelayProtocol(CommonClientRelayProtocol):
     def create_encoder(self):
         return ShadowsocksEncryptionWrapperEncoder(
             encrypt_method=self.config.cipher_method,

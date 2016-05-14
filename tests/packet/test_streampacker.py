@@ -52,7 +52,7 @@ class StreamPackerTest(unittest.TestCase):
         encoded_data = packer.pack(dummy_header, data1)
         encoded_data += packer.pack(None, data2)
 
-        header, decoded_data = unpacker.unpack(DummyPacketHeader(), encoded_data)
+        header, decoded_data = unpacker.unpack(encoded_data, DummyPacketHeader())
         self.assertEqual(header.to_bytes() + decoded_data, data_header + data1 + data2)
 
         in_bytes_1 = packer.in_bytes

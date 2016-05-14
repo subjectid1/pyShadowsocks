@@ -26,7 +26,7 @@ class Socks5Processor(object):
         self.transport = transport
 
         # for socks5 connect request
-        self._tcp_connected_addr = None
+        self._tcp_session_target_addr = None
         self._udp_connected_addr = None
 
         self.tcp_connect_coroutine = tcp_connect_coroutine
@@ -35,9 +35,9 @@ class Socks5Processor(object):
         self.state = STAGE_SOCKS5_METHOD_SELECT
 
     @property
-    def tcp_connected_addr(self):
-        if self.state == STAGE_SOCKS5_TCP_RELAY and self._tcp_connected_addr:
-            return self._tcp_connected_addr
+    def tcp_session_target_addr(self):
+        if self.state == STAGE_SOCKS5_TCP_RELAY and self._tcp_session_target_addr:
+            return self._tcp_session_target_addr
         return None
 
     def get_state(self):
@@ -112,8 +112,8 @@ class Socks5Processor(object):
             else:
                 f = None
                 if cmd == constants.SOCKS5_CMD_CONNECT:
-                    self._tcp_connected_addr = addr
-                    f = asyncio.ensure_future(self.tcp_connect_coroutine(self._tcp_connected_addr), loop=self.loop)
+                    self._tcp_session_target_addr = addr
+                    f = asyncio.ensure_future(self.tcp_connect_coroutine(self._tcp_session_target_addr), loop=self.loop)
 
                 elif cmd == constants.SOCKS5_CMD_UDP_ASSOCIATE:
                     self._udp_connected_addr = addr
