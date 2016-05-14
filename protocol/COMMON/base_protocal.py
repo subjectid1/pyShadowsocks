@@ -7,6 +7,7 @@
 #
 #
 import asyncio
+from argparse import Namespace
 
 import settings
 
@@ -23,6 +24,7 @@ class BaseProtocol(asyncio.Protocol):
 
 
 class BaseServerProtocal(BaseProtocol):
-    def __init__(self, loop):
+    def __init__(self, loop, config: Namespace = None):
         super(BaseServerProtocal, self).__init__()
         self.loop = loop
+        self.config = config
