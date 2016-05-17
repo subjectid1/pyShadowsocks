@@ -58,7 +58,7 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
             data = self.decoder.decode(data)
 
         if self.client:
-            asyncio.Task(self.send_data_to_remote(data), loop=self.loop)
+            asyncio.Task(self.send_data_to_remote(self.client, data), loop=self.loop)
         else:
             asyncio.Task(self.set_up_relay('example.com', 80), loop=self.loop)
 

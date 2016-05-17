@@ -60,7 +60,7 @@ class ShadowsocksServerStreamRelayProtocol(ServerStreamRelayProtocol):
 
         if self.relay_state == constants.RELAY_STATE_CONECTED:
             # TODO: inspect the relay client' connection status, try to reconnect if disconn
-            asyncio.ensure_future(self.send_data_to_remote(data), loop=self.loop)
+            asyncio.ensure_future(self.send_data_to_remote(self.client, data), loop=self.loop)
 
         elif self.relay_state == constants.RELAY_STATE_CONNECTING:
             settings.PROTO_LOG.error('unexpected state: receive data before connection completes')
