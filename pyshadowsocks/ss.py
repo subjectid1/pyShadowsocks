@@ -34,7 +34,7 @@ def main():
             coro = loop.create_server(
                 lambda: ShadowsocksSOCKS5ServerProtocol(loop, config=ns),
                 '0.0.0.0',
-                ns.listen_port)
+                ns.socks_port)
             server = loop.run_until_complete(coro)
 
             coro = loop.create_server(FakeHTTPGetProtocol, '127.0.0.1', 8080)
