@@ -62,7 +62,7 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
 * Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
 
 * Add a shell service config
-![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png “Just put the ss command here”)
+![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
         
 # TODO
