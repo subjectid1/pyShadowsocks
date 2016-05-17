@@ -24,18 +24,14 @@ setup(
 
     package_data={
         # If any package contains *.txt or *.rst files, include them:
-        '': ['*.txt', '*.md'],
+        '': ['*.txt', '*.md', '*.pac'],
         # And include any *.msg files found in the 'hello' package, too:
-        'pac': ['*.pac'],
     },
 
     install_requires=['cryptography>=1.2.3'],
 
     platforms='any',
     include_package_data = True,
-
-    zip_safe=False,
-
     classifiers=[
         "Development Status :: beta",
         "Environment :: Console",
