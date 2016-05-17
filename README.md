@@ -61,7 +61,7 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
 ## Mac Client
 * Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
 
-* Add a shell service config
+* Add a shell service config (to start local socks server) and then click the ON button
 ![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
         
