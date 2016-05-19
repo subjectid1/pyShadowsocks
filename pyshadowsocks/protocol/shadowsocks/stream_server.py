@@ -79,7 +79,7 @@ class ShadowsocksServerStreamRelayProtocol(ServerStreamRelayProtocol):
                 else:
                     self.relay_state = constants.RELAY_STATE_NOT_CONNECTED
                     settings.PROTO_LOG.warning('can not create relay connection to %s:%d',
-                                               self.relay_target_addr.add,
+                                               self.relay_target_addr.addr,
                                                self.relay_target_addr.port)
                     self.transport.close()
 

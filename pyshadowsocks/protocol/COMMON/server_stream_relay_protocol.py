@@ -7,8 +7,10 @@
 #
 
 import asyncio
+import concurrent.futures
 from argparse import Namespace
 
+import constants
 from abc import abstractmethod, ABCMeta
 from protocol.COMMON.base_server_relay_protocol import BaseServerRelayProtocal
 from settings import PROTO_LOG
@@ -31,11 +33,13 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
             assert (addr is not None and port is not None)
             try:
                 client = self.get_relay_protocal()
-                _, self.client = yield from self.loop.create_connection(
+                fut = self.loop.create_connection(
                     lambda: client,
                     addr,
                     port)
-            except (ConnectionError, TimeoutError, OSError):
+
+                _, self.client = yield from asyncio.wait_for(fut, constants.RELAY_CONNECT_TIMEOUT, loop=self.loop)
+            except (ConnectionError, concurrent.futures.TimeoutError):
                 PROTO_LOG.exception('Fail to set up connection to %s:%d', addr, port)
                 return False
             else:
