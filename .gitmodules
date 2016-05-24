@@ -1,0 +1,3 @@
+[submodule "pyshadowsocks/encrypt/oscrypto"]
+	path = pyshadowsocks/encrypt/oscrypto
+	url = https://github.com/wbond/oscrypto
