@@ -16,10 +16,7 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 ### For Ubuntu 14.04
 
 ```
-$ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
-
-$ pip3 install cryptography
-
+$ sudo apt-get install openssl
 $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
@@ -30,8 +27,6 @@ See cryptography doc: [building-cryptography-on-os-x](https://cryptography.io/en
 * build openssl manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
 
 ```
-$ env LDFLAGS="-L/usr/local/openssl/lib" CFLAGS="-I/usr/local/openssl/include" pip3 install cryptography
-
 $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
     
@@ -39,8 +34,6 @@ $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#eg
 
 ```
 $ brew install openssl
-$ env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip3 install cryptography
-
 $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
@@ -71,4 +64,4 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
 2. Filtering connections to local ip for security consideration
 3. SOCKS5 over SSL
 4. Custom protocol with random bytes padding, carry TCP/UPD/HTTP traffic, get away from DPI
-5. Remove the cryptography library, use openssl with ctypes.
+5. ~~Remove the cryptography library, use openssl with ctypes.~~
