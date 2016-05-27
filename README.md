@@ -22,7 +22,6 @@ $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#eg
 
 ### For Mac OS
 Mac OS has a deprecated openssl and does not includes the header files, so you need to install openssl library manually.
-See cryptography doc: [building-cryptography-on-os-x](https://cryptography.io/en/latest/installation/#building-cryptography-on-os-x)
 
 * build openssl manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
 
