@@ -13,8 +13,8 @@ from socket import socketpair
 
 import constants
 import encrypt
-from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
 from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
+from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
 from protocol.socks5.socks5_client import SOCKS5ConnectProtocol
 
 
@@ -24,13 +24,13 @@ class ShadowsocksSOCKS5ServerTest(unittest.TestCase):
         lsock, rsock = socketpair()
         loop = asyncio.get_event_loop()
 
-        _args = {constants.ARG_CIPHER_METHOD: encrypt.CRYPTO_AES_256_CFB,
+        _args = {constants.ARG_CIPHER_METHOD: encrypt.AES_256_CFB,
                  constants.ARG_PASSWORD: '123456',
                  constants.ARG_REMOTE_HOST: '127.0.0.1',
                  constants.ARG_REMOTE_PORT: 9002}
         local_config = Namespace(**_args)
 
-        _args = {constants.ARG_CIPHER_METHOD: encrypt.CRYPTO_AES_256_CFB,
+        _args = {constants.ARG_CIPHER_METHOD: encrypt.AES_256_CFB,
                  constants.ARG_PASSWORD: '123456',
                  constants.ARG_LISTEN_PORT: 9002}
         retmote_config = Namespace(**_args)

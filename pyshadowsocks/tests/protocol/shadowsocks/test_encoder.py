@@ -7,6 +7,7 @@
 #
 #
 import unittest
+
 import encrypt
 import os
 import random
@@ -23,13 +24,13 @@ class ShadowsocksCipherTest(unittest.TestCase):
 
     def test_ShadowsocksEncryptionWrapperEncoder(self):
         encoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=encrypt.CRYPTO_AES_256_CFB,
+            encrypt_method=encrypt.AES_256_CFB,
             encript_mode=True,
             password=b'123456'
         )
 
         decoder = ShadowsocksEncryptionWrapperEncoder(
-            encrypt_method=encrypt.CRYPTO_AES_256_CFB,
+            encrypt_method=encrypt.AES_256_CFB,
             encript_mode=False,
             password=b'123456'
         )

@@ -6,7 +6,6 @@
 # Info:
 #
 #
-from encrypt.base.data_encoder import DataEncoder
 from packet.packet_header import PacketHeader
 
 
