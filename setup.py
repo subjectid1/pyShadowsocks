@@ -8,7 +8,7 @@ README = open(os.path.join(here, 'README.md'), encoding='utf-8').read()
 
 setup(
     name='pyshadowsocks',
-    version='0.2',
+    version='0.3',
 
     author='booopooob@gmail.com',
     author_email='booopooob@gmail.com',
@@ -28,7 +28,7 @@ setup(
         # And include any *.msg files found in the 'hello' package, too:
     },
 
-    install_requires=['cryptography>=1.2.3'],
+    install_requires=[],
 
     platforms='any',
     include_package_data = True,
