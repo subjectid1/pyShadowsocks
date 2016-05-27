@@ -1,10 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals, division, absolute_import, print_function
 
-import re
-from ctypes.util import find_library
 from ctypes import CDLL, c_void_p, c_char_p, c_int, c_ulong, c_uint, c_long, c_size_t, POINTER
+from ctypes.util import find_library
 
+import re
 from ._errors import pretty_message
 from ._ffi import LibraryNotFoundError, FFIEngineError
 
@@ -123,29 +123,43 @@ try:
     ]
     libcrypto.EVP_CIPHER_CTX_free.restype = None
 
-    libcrypto.EVP_aes_128_cbc.argtypes = []
-    libcrypto.EVP_aes_128_cbc.restype = P_EVP_CIPHER
+    libcrypto.EVP_CIPHER_block_size.argtypes = [
+        P_EVP_CIPHER
+    ]
+    libcrypto.EVP_CIPHER_block_size.restype = c_int
 
-    libcrypto.EVP_aes_192_cbc.argtypes = []
-    libcrypto.EVP_aes_192_cbc.restype = P_EVP_CIPHER
+    libcrypto.EVP_CIPHER_key_length.argtypes = [
+        P_EVP_CIPHER
+    ]
+    libcrypto.EVP_CIPHER_key_length.restype = c_int
 
-    libcrypto.EVP_aes_256_cbc.argtypes = []
-    libcrypto.EVP_aes_256_cbc.restype = P_EVP_CIPHER
-
-    libcrypto.EVP_des_cbc.argtypes = []
-    libcrypto.EVP_des_cbc.restype = P_EVP_CIPHER
-
-    libcrypto.EVP_des_ede_cbc.argtypes = []
-    libcrypto.EVP_des_ede_cbc.restype = P_EVP_CIPHER
-
-    libcrypto.EVP_des_ede3_cbc.argtypes = []
-    libcrypto.EVP_des_ede3_cbc.restype = P_EVP_CIPHER
-
-    libcrypto.EVP_rc4.argtypes = []
-    libcrypto.EVP_rc4.restype = P_EVP_CIPHER
-
-    libcrypto.EVP_rc2_cbc.argtypes = []
-    libcrypto.EVP_rc2_cbc.restype = P_EVP_CIPHER
+    libcrypto.EVP_CIPHER_iv_length.argtypes = [
+        P_EVP_CIPHER
+    ]
+    libcrypto.EVP_CIPHER_iv_length.restype = c_int
+    # libcrypto.EVP_aes_128_cbc.argtypes = []
+    # libcrypto.EVP_aes_128_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_aes_192_cbc.argtypes = []
+    # libcrypto.EVP_aes_192_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_aes_256_cbc.argtypes = []
+    # libcrypto.EVP_aes_256_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_des_cbc.argtypes = []
+    # libcrypto.EVP_des_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_des_ede_cbc.argtypes = []
+    # libcrypto.EVP_des_ede_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_des_ede3_cbc.argtypes = []
+    # libcrypto.EVP_des_ede3_cbc.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_rc4.argtypes = []
+    # libcrypto.EVP_rc4.restype = P_EVP_CIPHER
+    #
+    # libcrypto.EVP_rc2_cbc.argtypes = []
+    # libcrypto.EVP_rc2_cbc.restype = P_EVP_CIPHER
 
     libcrypto.EVP_EncryptInit_ex.argtypes = [
         P_EVP_CIPHER_CTX,
@@ -647,6 +661,9 @@ try:
             c_void_p
         ]
         libcrypto.EVP_PKEY_CTX_ctrl.restype = c_int
+
+
+
 
 except (AttributeError):
     raise FFIEngineError('Error initializing ctypes')

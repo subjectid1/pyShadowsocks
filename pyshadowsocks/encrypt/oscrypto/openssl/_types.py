@@ -1,24 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals, division, absolute_import, print_function
 
-import sys
 import inspect
 
-
-if sys.version_info < (3,):
-    str_cls = unicode  # noqa
-    byte_cls = str
-    int_types = (int, long)  # noqa
-
-    def bytes_to_list(byte_string):
-        return [ord(b) for b in byte_string]
-
-else:
-    str_cls = str
-    byte_cls = bytes
-    int_types = (int,)
-
-    bytes_to_list = list
+str_cls = str
+byte_cls = bytes
+int_types = (int,)
+bytes_to_list = list
 
 
 def type_name(value):
