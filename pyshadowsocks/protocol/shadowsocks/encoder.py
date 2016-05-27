@@ -8,9 +8,8 @@
 #
 import hashlib
 import os
-from encrypt import SymmetricEncryptions
-from encrypt.base.symmetric_encryptor import SymmetricEncryptor
-from encrypt.base.data_encoder import DataEncoder
+from encrypt import SymmetricEncryptions, SymmetricEncryptionsKeyAndIVLength
+from encrypt.data_encoder import DataEncoder
 
 
 def EVP_BytesToKey(password, key_len, iv_len):
@@ -36,24 +35,26 @@ def EVP_BytesToKey(password, key_len, iv_len):
 class ShadowsocksEncryptionWrapperEncoder(DataEncoder):
     def __init__(self, encrypt_method=None, password=None, encript_mode=True):
         cipherCls = SymmetricEncryptions[encrypt_method]
-        assert (issubclass(cipherCls, SymmetricEncryptor))
         if isinstance(password, str):
             password = password.encode('utf-8')
 
-        key, _ = EVP_BytesToKey(password, cipherCls.KEY_LENGTH, cipherCls.IV_LENGTH)
-        iv = os.urandom(cipherCls.IV_LENGTH)
+        key_size, iv_size = SymmetricEncryptionsKeyAndIVLength[encrypt_method]
+
+        key, _ = EVP_BytesToKey(password, key_size, iv_size)
+        iv = os.urandom(iv_size)
 
         self.key = key
         self.iv = None
         self.encoder = None
+        self.encrypt_method = encrypt_method
 
         if encript_mode:
             self.iv = iv
-            self.encoder = cipherCls(key=key, iv=iv)
+            self.encoder = cipherCls(encrypt_method, key, iv)
             self.is_iv_sent = False
         else:
             self.iv_buf = b''
-            self.iv_length = cipherCls.IV_LENGTH
+            self.iv_length = iv_size
             self.cipherCls = cipherCls
 
     def encode(self, data, end=False):
@@ -65,7 +66,7 @@ class ShadowsocksEncryptionWrapperEncoder(DataEncoder):
 
     def decode(self, data, end=False):
         if not self.encoder:
-            expected_iv_length = self.iv_length-len(self.iv_buf)
+            expected_iv_length = self.iv_length - len(self.iv_buf)
 
             if len(data) < expected_iv_length:
                 self.iv_buf += data[:len(data)]
@@ -74,7 +75,7 @@ class ShadowsocksEncryptionWrapperEncoder(DataEncoder):
                 iv = self.iv_buf + data[:expected_iv_length]
                 data_left = data[expected_iv_length:]
 
-                self.encoder = self.cipherCls(key=self.key, iv=iv)
+                self.encoder = self.cipherCls(self.encrypt_method, self.key, iv)
                 self.iv = iv
                 return self.encoder.decode(data_left, end=end)
 

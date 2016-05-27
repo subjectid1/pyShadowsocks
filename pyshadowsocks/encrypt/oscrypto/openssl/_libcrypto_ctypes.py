@@ -137,29 +137,48 @@ try:
         P_EVP_CIPHER
     ]
     libcrypto.EVP_CIPHER_iv_length.restype = c_int
-    # libcrypto.EVP_aes_128_cbc.argtypes = []
-    # libcrypto.EVP_aes_128_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_aes_192_cbc.argtypes = []
-    # libcrypto.EVP_aes_192_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_aes_256_cbc.argtypes = []
-    # libcrypto.EVP_aes_256_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_des_cbc.argtypes = []
-    # libcrypto.EVP_des_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_des_ede_cbc.argtypes = []
-    # libcrypto.EVP_des_ede_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_des_ede3_cbc.argtypes = []
-    # libcrypto.EVP_des_ede3_cbc.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_rc4.argtypes = []
-    # libcrypto.EVP_rc4.restype = P_EVP_CIPHER
-    #
-    # libcrypto.EVP_rc2_cbc.argtypes = []
-    # libcrypto.EVP_rc2_cbc.restype = P_EVP_CIPHER
+
+    libcrypto.EVP_CIPHER_CTX_block_size.argtypes = [
+        P_EVP_CIPHER_CTX
+    ]
+    libcrypto.EVP_CIPHER_CTX_block_size.restype = c_int
+
+    libcrypto.EVP_CIPHER_CTX_key_length.argtypes = [
+        P_EVP_CIPHER_CTX
+    ]
+    libcrypto.EVP_CIPHER_CTX_key_length.restype = c_int
+
+    libcrypto.EVP_CIPHER_CTX_iv_length.argtypes = [
+        P_EVP_CIPHER_CTX
+    ]
+    libcrypto.EVP_CIPHER_CTX_iv_length.restype = c_int
+
+    libcrypto.EVP_CipherInit_ex.argtypes = [
+        P_EVP_CIPHER_CTX,
+        P_EVP_CIPHER,
+        P_ENGINE,
+        c_char_p,
+        c_char_p,
+        c_int,
+    ]
+    libcrypto.EVP_CipherInit_ex.restype = c_int
+
+    libcrypto.EVP_CipherUpdate.argtypes = [
+        P_EVP_CIPHER_CTX,
+        c_char_p,
+        p_int,
+        c_char_p,
+        c_int
+    ]
+    libcrypto.EVP_CipherUpdate.restype = c_int
+
+    libcrypto.EVP_CipherFinal_ex.argtypes = [
+        P_EVP_CIPHER_CTX,
+        c_char_p,
+        p_int
+    ]
+    libcrypto.EVP_CipherFinal_ex.restype = c_int
+
 
     libcrypto.EVP_EncryptInit_ex.argtypes = [
         P_EVP_CIPHER_CTX,
