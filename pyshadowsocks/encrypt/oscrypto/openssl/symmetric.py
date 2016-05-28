@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, division, absolute_import, print_function
 
 import math
+from ctypes import create_string_buffer
 
 from ._errors import pretty_message
 from ._ffi import new, null, is_null, buffer_from_bytes, bytes_from_buffer, deref
@@ -150,15 +151,9 @@ def get_key_and_iv_length(cipher):
 
 
 def _get_evp_cipher(cipher):
-    evp_cipher_func = getattr(libcrypto, 'EVP_' + cipher.replace('-', '_'))
-    if not evp_cipher_func:
-        return
-
-    evp_cipher_func.argtypes = []
-    from ._libcrypto_ctypes import P_EVP_CIPHER
-    evp_cipher_func.restype = P_EVP_CIPHER
-
-    evp_cipher = evp_cipher_func()
+    c_cipher_name = create_string_buffer(cipher.encode('utf-8'))
+    evp_cipher = libcrypto.EVP_get_cipherbyname(c_cipher_name)
+    assert (evp_cipher is not None and evp_cipher != 0)
     return evp_cipher
 
 

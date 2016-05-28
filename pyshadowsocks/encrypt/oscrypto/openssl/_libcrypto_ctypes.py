@@ -123,6 +123,12 @@ try:
     ]
     libcrypto.EVP_CIPHER_CTX_free.restype = None
 
+    libcrypto.EVP_get_cipherbyname.argtypes = [
+        c_char_p
+    ]
+    libcrypto.EVP_get_cipherbyname.restype = P_EVP_CIPHER
+
+
     libcrypto.EVP_CIPHER_block_size.argtypes = [
         P_EVP_CIPHER
     ]
