@@ -65,3 +65,5 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
 4. Custom protocol with random bytes padding, carry TCP/UPD/HTTP traffic, get away from DPI
 5. ~~Remove the cryptography library, use openssl with ctypes.~~
 6. Use Apple's cryto library for Mac OS X instead of openssl
+7. Flow control
+8. Multi threading for multiple user/port

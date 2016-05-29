@@ -8,7 +8,9 @@
 #
 #
 import sys
+
 import os.path
+
 sys.path.insert(0, os.path.dirname(__file__))
 
 import asyncio
@@ -27,8 +29,8 @@ def main():
 
     ns = parse_args_new()
 
-    if ns.server_mode == constants.ARG_LOCAL_SERVER:
-        if ns.protocol_mode == constants.ARG_PROTOCOL_SHADOWSOCKS:
+    if ns.protocol_mode == constants.ARG_PROTOCOL_SHADOWSOCKS:
+        if ns.server_mode == constants.ARG_LOCAL_SERVER:
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
             coro = loop.create_server(
@@ -37,12 +39,13 @@ def main():
                 ns.socks_port)
             server = loop.run_until_complete(coro)
 
-            coro = loop.create_server(FakeHTTPGetProtocol, '127.0.0.1', 8080)
-            server = loop.run_until_complete(coro)
+            if ns.pac_port:
+                coro = loop.create_server(FakeHTTPGetProtocol, '127.0.0.1', ns.pac_port)
+                server = loop.run_until_complete(coro)
 
             loop.run_forever()
-    elif ns.server_mode == constants.ARG_REMOTE_SERVER:
-        if ns.protocol_mode == constants.ARG_PROTOCOL_SHADOWSOCKS:
+
+        elif ns.server_mode == constants.ARG_REMOTE_SERVER:
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
             coro = loop.create_server(lambda: ShadowsocksServerStreamRelayProtocol(loop, config=ns), '0.0.0.0',
