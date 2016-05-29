@@ -17,8 +17,8 @@ import asyncio
 import constants
 import settings
 from pac.http_server import FakeHTTPGetProtocol
-from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
-from protocol.shadowsocks.socks5_server import ShadowsocksSOCKS5ServerProtocol
+from protocol.shadowsocks.proxy_server import ShadowsocksProxyServerProtocol
+from protocol.shadowsocks.local_server import ShadowsocksLocalServerProtocol
 from util.config import parse_args_new
 from util.resc import set_open_file_limit_up_to
 
@@ -34,7 +34,7 @@ def main():
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
             coro = loop.create_server(
-                lambda: ShadowsocksSOCKS5ServerProtocol(loop, config=ns),
+                lambda: ShadowsocksLocalServerProtocol(loop, config=ns),
                 '0.0.0.0',
                 ns.socks_port)
             server = loop.run_until_complete(coro)
@@ -48,7 +48,7 @@ def main():
         elif ns.server_mode == constants.ARG_REMOTE_SERVER:
             loop = asyncio.get_event_loop()
             # Each client connection will create a new protocol instance
-            coro = loop.create_server(lambda: ShadowsocksServerStreamRelayProtocol(loop, config=ns), '0.0.0.0',
+            coro = loop.create_server(lambda: ShadowsocksProxyServerProtocol(loop, config=ns), '0.0.0.0',
                                       ns.listen_port)
             server = loop.run_until_complete(coro)
             loop.run_forever()

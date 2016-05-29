@@ -10,6 +10,11 @@ forward encrypt socks5 data to remote proxy, and then the proxy forward the sock
 Shadowsocks is mainly used for bypassing Great Firewall of China, since the data is encrypt and sent over 
 normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspection, it's hard to block.
 
+# NOTE
+* now shadowsocks protocol implements TCP without OTA feature, no UDP
+* sock5ssl implements only TCP(SOCKS Connect), no UDP
+
+
 # USAGE
 
 ## INSTALLATION

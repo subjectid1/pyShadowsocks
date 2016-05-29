@@ -18,9 +18,9 @@ from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
 
 
-class ShadowsocksServerStreamRelayProtocol(ServerStreamRelayProtocol):
+class ShadowsocksProxyServerProtocol(ServerStreamRelayProtocol):
     def __init__(self, loop, config: Namespace = None):
-        super(ShadowsocksServerStreamRelayProtocol, self).__init__(loop, config)
+        super(ShadowsocksProxyServerProtocol, self).__init__(loop, config)
         self.relay_target_addr = None
         self.stream_packer = StreamPacker()
 

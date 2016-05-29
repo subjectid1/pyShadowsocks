@@ -13,9 +13,9 @@ from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_server import SOCKS5ServerStreamProtocol
 
 
-class ShadowsocksSOCKS5ServerProtocol(SOCKS5ServerStreamProtocol):
+class ShadowsocksLocalServerProtocol(SOCKS5ServerStreamProtocol):
     def __init__(self, loop, config: Namespace = None):
-        super(ShadowsocksSOCKS5ServerProtocol, self).__init__(loop, config)
+        super(ShadowsocksLocalServerProtocol, self).__init__(loop, config)
 
         self.proxy_server = self.config.remote_host
         self.proxy_port = self.config.remote_port
@@ -43,4 +43,4 @@ class ShadowsocksSOCKS5ServerProtocol(SOCKS5ServerStreamProtocol):
 
             asyncio.ensure_future(self.send_data_to_remote(self.client, data), loop=self.loop)
         else:
-            super(ShadowsocksSOCKS5ServerProtocol, self).data_received(data)
+            super(ShadowsocksLocalServerProtocol, self).data_received(data)
