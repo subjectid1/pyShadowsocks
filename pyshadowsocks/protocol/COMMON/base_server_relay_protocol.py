@@ -33,13 +33,7 @@ class BaseServerRelayProtocal(BaseServerProtocal):
                                          self.connection_lost_from_remote)
 
     @asyncio.coroutine
-    def set_up_relay(self, addr, port):
-        """
-
-        :param target_addr: tuple: (host, port)
-        :param from_addr:
-        :return:
-        """
+    def set_up_relay(self, addr, port, **kwargs):
         raise NotImplementedError()
 
     @asyncio.coroutine

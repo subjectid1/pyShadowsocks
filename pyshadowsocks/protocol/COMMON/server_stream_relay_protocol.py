@@ -28,7 +28,7 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
         return None
 
     @asyncio.coroutine
-    def set_up_relay(self, addr, port):
+    def set_up_relay(self, addr, port, **kwargs):
         if not self.client:
             assert (addr is not None and port is not None)
             try:
@@ -36,7 +36,8 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
                 fut = self.loop.create_connection(
                     lambda: client,
                     addr,
-                    port)
+                    port,
+                    **kwargs)
 
                 _, self.client = yield from asyncio.wait_for(fut, constants.RELAY_CONNECT_TIMEOUT, loop=self.loop)
             except (ConnectionError, concurrent.futures.TimeoutError):
@@ -60,11 +61,11 @@ class ServerStreamRelayProtocol(BaseServerRelayProtocal, metaclass=ABCMeta):
     def data_received(self, data):
         if self.decoder:
             data = self.decoder.decode(data)
-
-        if self.client:
-            asyncio.Task(self.send_data_to_remote(self.client, data), loop=self.loop)
-        else:
-            asyncio.Task(self.set_up_relay('example.com', 80), loop=self.loop)
+            #
+            # if self.client:
+            #     asyncio.Task(self.send_data_to_remote(self.client, data), loop=self.loop)
+            # else:
+            #     asyncio.Task(self.set_up_relay('example.com', 80), loop=self.loop)
 
     def connection_lost_from_remote(self, client, *args):
         # the client arguments equals to self.client
