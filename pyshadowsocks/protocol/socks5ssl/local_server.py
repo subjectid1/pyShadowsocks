@@ -31,6 +31,7 @@ class SOCKS5SSLLocalServerProtocol(ServerStreamRelayProtocol):
             self._connected = fut.result()
             if self._connected and len(self._buffer) > 0:
                 asyncio.ensure_future(self.send_data_to_remote(self.client, self._buffer), loop=self.loop)
+                self._buffer = None
 
         f.add_done_callback(send_buffer)
 
