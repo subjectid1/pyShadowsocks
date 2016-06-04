@@ -74,7 +74,7 @@ STRUCT_SOCK5_REPLY = STRUCT_SOCK5_REQUEST
 ERROR_MSG_NOT_ENOUGHT_DATA_FOR = 'not enought data for {}'
 
 PROTOCOL_SHADOWSOCKS = 'shadowsocks'
-PROTOCOL_SOCKS5OVERSSL = 'socks5_ssl'
+PROTOCOL_SOCKS5OVERSSL = 'socks5ssl'
 
 #############################For argument parsing #######################################
 ### args for server
@@ -105,7 +105,7 @@ SERVER_MODES = [
 
 PROTOCOL_MODES = [
     ARG_PROTOCOL_SHADOWSOCKS,
-    # ARG_PROTOCOL_SOCKS5OVERSSL: [ARG_PASSWORD, ARG_CIPHER_METHOD],
+    ARG_PROTOCOL_SOCKS5OVERSSL,
 ]
 
 ### argparse.parser.add_parser arguments for modes
@@ -123,5 +123,8 @@ ARUMENTS_FOR_ADD_PARSER = {
         ARG_PASSWORD: {'required': True},
         ARG_CIPHER_METHOD: {'choices': encrypt.SymmetricEncryptions, 'required': True},
         ARG_OTA_ENABLED: {'required': False, 'default': False},
+    },
+    ARG_PROTOCOL_SOCKS5OVERSSL: {
+        
     }
 }
