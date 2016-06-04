@@ -10,7 +10,7 @@ import os.path
 from protocol.COMMON.base_protocal import BaseProtocol
 
 
-class FakeHTTPGetProtocol(BaseProtocol):
+class FakePACGetProtocol(BaseProtocol):
     def data_received(self, data):
         # GET /proxy.pac HTTP/1.1\r\n
         if data.startswith(b'GET /proxy.pac'):
