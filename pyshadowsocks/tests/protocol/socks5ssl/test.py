@@ -50,11 +50,11 @@ class SOCKS5SSLTest(unittest.TestCase):
             loop.stop()
 
         def conneted_callback(client_protocol):
-            http_request_content = b'GET / HTTP/1.1\r\nHost: example.com\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
+            http_request_content = b'GET / HTTP/1.1\r\nHost: www.12306.cn\r\nUser-Agent: curl/7.43.0\r\nAccept: */*\r\n\r\n'
             client_protocol.send_stream(http_request_content)
 
         connect_coro = loop.create_connection(
-            lambda: SOCKS5ConnectProtocol(loop, 'example.com', 80, conneted_callback, data_callback), sock=lsock)
+            lambda: SOCKS5ConnectProtocol(loop, 'www.12306.cn', 80, conneted_callback, data_callback), sock=lsock)
 
         _, client_protocol = loop.run_until_complete(connect_coro)
         client_protocol.start()
