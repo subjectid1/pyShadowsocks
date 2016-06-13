@@ -11,7 +11,7 @@ import os.path
 import settings
 
 
-def create_certs():
+def create_self_signed_certs():
     import subprocess
 
     if not os.path.exists(settings.SSL_PUBLIC_FILE):
@@ -41,7 +41,7 @@ def create_server_ssl_context():
     # which will not match when the example code runs elsewhere,
     # so disable hostname verification.
 
-    create_certs()
+    create_self_signed_certs()
     ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
     ssl_context.check_hostname = False
     ssl_context.load_cert_chain(settings.SSL_PUBLIC_FILE, settings.SSL_RPIVATE_FILE)
