@@ -16,7 +16,7 @@ import encrypt
 from packet.stream_packer import StreamPacker
 from protocol.shadowsocks.encoder import ShadowsocksEncryptionWrapperEncoder
 from protocol.shadowsocks.header import ShadowsocksPacketHeader
-from protocol.shadowsocks.stream_server import ShadowsocksServerStreamRelayProtocol
+from protocol.shadowsocks.proxy_server import ShadowsocksProxyServerProtocol
 
 
 class ShadowsocksServerTest(unittest.TestCase):
@@ -29,7 +29,7 @@ class ShadowsocksServerTest(unittest.TestCase):
         config = Namespace(**_args)
 
         # Register the socket to wait for data
-        connect_coro = loop.create_connection(lambda: ShadowsocksServerStreamRelayProtocol(loop, config), sock=lsock)
+        connect_coro = loop.create_connection(lambda: ShadowsocksProxyServerProtocol(loop, config), sock=lsock)
         transport, protocol = loop.run_until_complete(connect_coro)
 
         cipher_method = encrypt.AES_256_CFB

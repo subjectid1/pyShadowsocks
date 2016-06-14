@@ -74,7 +74,7 @@ STRUCT_SOCK5_REPLY = STRUCT_SOCK5_REQUEST
 ERROR_MSG_NOT_ENOUGHT_DATA_FOR = 'not enought data for {}'
 
 PROTOCOL_SHADOWSOCKS = 'shadowsocks'
-PROTOCOL_SOCKS5OVERSSL = 'socks5_ssl'
+PROTOCOL_SOCKS5OVERSSL = 'socks5ssl'
 
 #############################For argument parsing #######################################
 ### args for server
@@ -83,6 +83,8 @@ ARG_LOCAL_SERVER = 'local'
 ARG_REMOTE_SERVER = 'remote'
 
 ARG_SOCKS_LISTEN_PORT = 'socks_port'
+ARG_PAC_LISTEN_PORT = 'pac_port'
+
 ARG_LISTEN_PORT = 'listen_port'
 ARG_REMOTE_HOST = 'remote_host'
 ARG_REMOTE_PORT = 'remote_port'
@@ -103,7 +105,7 @@ SERVER_MODES = [
 
 PROTOCOL_MODES = [
     ARG_PROTOCOL_SHADOWSOCKS,
-    # ARG_PROTOCOL_SOCKS5OVERSSL: [ARG_PASSWORD, ARG_CIPHER_METHOD],
+    ARG_PROTOCOL_SOCKS5OVERSSL,
 ]
 
 ### argparse.parser.add_parser arguments for modes
@@ -112,6 +114,7 @@ ARUMENTS_FOR_ADD_PARSER = {
         ARG_REMOTE_HOST: {'required': True},
         ARG_REMOTE_PORT: {'type': int, 'required': True},
         ARG_SOCKS_LISTEN_PORT: {'type': int, 'required': False, 'default': 1080},
+        ARG_PAC_LISTEN_PORT: {'type': str, 'required': False, 'default': None},
     },
     ARG_REMOTE_SERVER: {
         ARG_LISTEN_PORT: {'type': int, 'required': True},
@@ -120,5 +123,8 @@ ARUMENTS_FOR_ADD_PARSER = {
         ARG_PASSWORD: {'required': True},
         ARG_CIPHER_METHOD: {'choices': encrypt.SymmetricEncryptions, 'required': True},
         ARG_OTA_ENABLED: {'required': False, 'default': False},
+    },
+    ARG_PROTOCOL_SOCKS5OVERSSL: {
+        
     }
 }

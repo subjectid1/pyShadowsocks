@@ -1,13 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals, division, absolute_import, print_function
 
+import os
+import re
 from ctypes import CDLL, c_void_p, c_char_p, c_int, c_ulong, c_uint, c_long, c_size_t, POINTER
 from ctypes.util import find_library
 
-import re
 from ._errors import pretty_message
 from ._ffi import LibraryNotFoundError, FFIEngineError
-
 
 __all__ = [
     'libcrypto',
@@ -15,8 +15,10 @@ __all__ = [
     'version_info',
 ]
 
+os.environ['DYLD_LIBRARY_PATH'] = '/usr/local/openssl/lib/'
 
 libcrypto_path = find_library('crypto')
+
 if not libcrypto_path:
     raise LibraryNotFoundError('The library libcrypto could not be found')
 
