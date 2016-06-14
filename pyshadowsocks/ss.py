@@ -7,18 +7,17 @@
 #
 #
 #
-import sys
-
 import os.path
-from protocol.socks5ssl import create_server_ssl_context
-from protocol.socks5ssl.local_server import SOCKS5SSLLocalServerProtocol
-from protocol.socks5ssl.proxy_server import SOCKS5SSLProxyServerProtocol
+import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
 import asyncio
 import constants
 import settings
+from protocol.socks5ssl import create_server_ssl_context
+from protocol.socks5ssl.local_server import SOCKS5SSLLocalServerProtocol
+from protocol.socks5ssl.proxy_server import SOCKS5SSLProxyServerProtocol
 from pac.http_server import FakePACGetProtocol
 from protocol.shadowsocks.proxy_server import ShadowsocksProxyServerProtocol
 from protocol.shadowsocks.local_server import ShadowsocksLocalServerProtocol
@@ -66,7 +65,6 @@ def main():
                 ns.listen_port,
                 ssl=create_server_ssl_context())
             server = loop.run_until_complete(coro)
-
 
     if ns.server_mode == constants.ARG_LOCAL_SERVER and ns.pac_port:
         coro = loop.create_server(FakePACGetProtocol, '127.0.0.1', ns.pac_port)
