@@ -7,11 +7,11 @@
 #
 #
 import asyncio
-from typing import Callable, Tuple
+from typing import Callable, Tuple, Dict
 
 import constants
 import settings
-from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_SOCKS5_REQUEST, STAGE_SOCKS5_UDP_ASSOCIATE, \
+from constants import STAGE_SOCKS5_UDP_ASSOCIATE, \
     STAGE_SOCKS5_TCP_RELAY, \
     STRUCT_BBB, STRUCT_BB, STRUCT_B, STRUCT_SOCK5_REPLY
 from protocol.socks5.header import Socks5AddrHeader
@@ -21,23 +21,20 @@ from util.net.address import what_type_of_the_address
 class Socks5Processor(object):
     def __init__(self, loop, transport,
                  tcp_connect_coroutine: Callable[[Socks5AddrHeader], Tuple[str, int]],
-                 udp_connect_coroutine: Callable[[Socks5AddrHeader], Tuple[str, int]]):
+                 udp_connect_coroutine: Callable[[Socks5AddrHeader], Tuple[str, int]],
+                 auth=constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED,
+                 username_passwords: Dict = None):
+
         self.loop = loop
         self.transport = transport
-
-        # for socks5 connect request
-        self._udp_connected_addr = None
 
         self.tcp_connect_coroutine = tcp_connect_coroutine
         self.udp_connect_coroutine = udp_connect_coroutine
 
-        self.state = STAGE_SOCKS5_METHOD_SELECT
+        self.auth = auth
+        self.username_passwords = username_passwords
 
-    @property
-    def tcp_session_target_addr(self):
-        if self.state == constants.STAGE_SOCKS5_TCP_RELAY and self._tcp_session_target_addr:
-            return self._tcp_session_target_addr
-        return None
+        self.state = constants.STAGE_SOCKS5_METHOD_SELECT
 
     def upd_relaying(self):
         return self.state == constants.STAGE_SOCKS5_UDP_ASSOCIATE
@@ -75,11 +72,15 @@ class Socks5Processor(object):
             method_data = method_data[:num_of_methods]
             methods = [method for method, in STRUCT_B.iter_unpack(method_data)]
 
-            if constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED in methods:
+            if self.auth in methods:
                 # The server selects from one of the methods given in METHODS, and sends a METHOD selection message
-                response_data = STRUCT_BB.pack(constants.SOCKS5_VERSION,
-                                               constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED)
-                self.state = STAGE_SOCKS5_REQUEST
+                response_data = STRUCT_BB.pack(constants.SOCKS5_VERSION, self.auth)
+
+                if self.auth == constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED:
+                    self.state = constants.STAGE_SOCKS5_REQUEST
+                elif self.auth == constants.SOCKS5_METHOD_USERNAME_PASSWORD:
+                    self.state = constants.STAGE_SOCKS5_USERNAME_PASSWORD_AUTHENTICATION
+
                 self.transport.write(response_data)
                 return True
             else:
@@ -90,7 +91,44 @@ class Socks5Processor(object):
                 self.transport.write(response_data)
                 return False
 
-        elif self.state == STAGE_SOCKS5_REQUEST:
+        elif self.state == constants.STAGE_SOCKS5_USERNAME_PASSWORD_AUTHENTICATION:
+            #
+            # +----+------+----------+------+----------+
+            # |VER | ULEN | UNAME    | PLEN | PASSWD   |
+            # +----+------+----------+------+----------+
+            # | 1  | 1    | 1 to 255 | 1    | 1 to255  |
+            # +----+------+----------+------+----------+
+            #
+            version, len_of_user = STRUCT_BB.unpack_from(data)
+            data = data[STRUCT_BB.size:]
+
+            user = data[:len_of_user].decode('utf-8')
+            data = data[len_of_user:]
+
+            len_of_password, = STRUCT_B.unpack_from(data[:1])
+            data = data[1:]
+            password = data[:len_of_password].decode('utf-8')
+
+            # +----+--------+
+            # |VER | STATUS |
+            # +----+--------+
+            # | 1  | 1      |
+            # +----+--------+
+            #
+            # A STATUS field of X'00' indicates success. If the server returns a
+            # `failure' (STATUS value other than X'00') status, it MUST close the
+            # connection.
+            #
+            if user in self.username_passwords and self.username_passwords[user] == password:
+                self.state = constants.STAGE_SOCKS5_REQUEST
+                self.transport.write(STRUCT_BB.pack(constants.SOCKS5_VERSION, 0))
+                return True
+            else:
+                self.transport.write(STRUCT_BB.pack(constants.SOCKS5_VERSION, 0xFF))
+                self.transport.close()
+                return False
+
+        elif self.state == constants.STAGE_SOCKS5_REQUEST:
             #
             # resquest:
             # +-----+-----+-------+------+----------+----------+
@@ -120,8 +158,7 @@ class Socks5Processor(object):
                     f = asyncio.ensure_future(self.tcp_connect_coroutine(addr), loop=self.loop)
 
                 elif cmd == constants.SOCKS5_CMD_UDP_ASSOCIATE:
-                    self._udp_connected_addr = addr
-                    f = asyncio.ensure_future(self.udp_connect_coroutine(self._udp_connected_addr), loop=self.loop)
+                    f = asyncio.ensure_future(self.udp_connect_coroutine(addr), loop=self.loop)
 
                 def conn_completed(future):
                     # socks5 states: In the reply to a CONNECT, BND.PORT contains the port number that

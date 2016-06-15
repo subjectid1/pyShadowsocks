@@ -57,10 +57,8 @@ class SOCKS5SSLTest(unittest.TestCase):
             lambda: SOCKS5ConnectProtocol(loop, 'www.12306.cn', 80, conneted_callback, data_callback), sock=lsock)
 
         _, client_protocol = loop.run_until_complete(connect_coro)
-        client_protocol.start()
 
         # Simulate the reception of data from the network
         # loop.call_soon(rsock.send, encoded_data)
         # Run the event loop
-
         loop.run_forever()

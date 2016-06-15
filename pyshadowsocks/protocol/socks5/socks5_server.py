@@ -10,6 +10,7 @@
 import asyncio
 import functools
 
+import constants
 from protocol.COMMON.server_stream_relay_protocol import ServerStreamRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_processor import Socks5Processor
@@ -18,10 +19,18 @@ from protocol.socks5.socks5_processor import Socks5Processor
 class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
     def connection_made(self, transport):
         super(SOCKS5ServerStreamProtocol, self).connection_made(transport)
+        auth = (self.config.user and
+                constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED or
+                constants.SOCKS5_METHOD_USERNAME_PASSWORD)
+
+        username_passwords = {self.config.user: self.config.password}
+
         self.sock5_processor = Socks5Processor(self.loop,
                                                self.transport,
                                                functools.partial(self.connect_to_addr_tcp),
-                                               functools.partial(self.connect_to_addr_udp))
+                                               functools.partial(self.connect_to_addr_udp),
+                                               auth=auth,
+                                               username_passwords=username_passwords)
 
     async def connect_to_addr_tcp(self, addr: Socks5AddrHeader):
         """

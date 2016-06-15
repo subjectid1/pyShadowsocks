@@ -10,9 +10,9 @@ forward encrypt socks5 data to remote proxy, and then the proxy forward the sock
 Shadowsocks is mainly used for bypassing Great Firewall of China, since the data is encrypt and sent over 
 normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspection, it's hard to block.
 
-# NOTE
-* now shadowsocks protocol implements TCP without OTA feature, no UDP
-* sock5ssl implements only TCP(SOCKS Connect), no UDP
+# FEATURE
+* shadowsocks protocol implements TCP proxy without OTA feature, no UDP
+* sock5ssl implements only SOCKS CONNECT, no BIND/UDP ASSOCIATE
 
 
 # USAGE
@@ -64,11 +64,11 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
         
 # TODO
 
-1. SOCKS5 user/password authentication
-2. Filtering connections to local ip for security consideration
-3. ~~SOCKS5 over SSL~~
-4. Custom protocol with random bytes padding, carry TCP/UPD/HTTP traffic, get away from DPI
-5. ~~Remove the cryptography library, use openssl with ctypes.~~
-6. Use Apple's cryto library for Mac OS X instead of openssl
-7. Flow control
+1. ~~SOCKS5 user/password authentication~~
+2. ~~SOCKS5 over SSL~~
+3. ~~Remove the cryptography library, use openssl with ctypes.~~
+4. Use Apple's cryto library for Mac OS X instead of openssl
+5. Filtering connections to local ip for security consideration
+6. Flow control
+7. Custom protocol with random bytes padding, carry TCP/UPD/HTTP traffic, get away from DPI
 8. Multi threading for multiple user/port
