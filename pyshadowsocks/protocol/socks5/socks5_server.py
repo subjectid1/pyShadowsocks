@@ -8,9 +8,8 @@
 #                - relay in data_received: https://stackoverflow.com/questions/21295068/how-can-i-create-a-relay-server-using-tulip-asyncio-in-python/21297354#21297354
 #
 import asyncio
-
-import constants
 import functools
+
 from protocol.COMMON.server_stream_relay_protocol import ServerStreamRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_processor import Socks5Processor
@@ -42,18 +41,15 @@ class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
             fields indicate the port number/address where the client MUST send
             UDP request messages to be relayed.
         """
-        return True, ('127.0.0.1', 1080)
+        return False, (None, None)
 
     def data_received(self, data):
-        if self.sock5_processor.get_state() in [constants.STAGE_SOCKS5_METHOD_SELECT,
-                                                constants.STAGE_SOCKS5_METHOD_AUTHENTICATION,
-                                                constants.STAGE_SOCKS5_REQUEST]:
-            self.sock5_processor.do_request(data)
-        elif self.sock5_processor.get_state() == constants.STAGE_SOCKS5_TCP_RELAY:
+        if self.sock5_processor.neek_more_data():
+            self.sock5_processor.feed_data(data)
+        elif self.sock5_processor.tcp_relaying():
             asyncio.ensure_future(self.send_data_to_remote(self.client, data), loop=self.loop)
-        elif self.sock5_processor.get_state() == constants.SOCKS_SERVER_MODE_UDP_RELAY:
-            # never goto here
-            self.transport.close()
+        elif self.sock5_processor.upd_relaying():
+            raise NotImplemented()
 
 
 if __name__ == '__main__':

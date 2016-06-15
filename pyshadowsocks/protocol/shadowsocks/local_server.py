@@ -7,7 +7,6 @@
 import asyncio
 from argparse import Namespace
 
-import constants
 from protocol.shadowsocks.client import ShadowsocksClientRelayProtocol
 from protocol.socks5.header import Socks5AddrHeader
 from protocol.socks5.socks5_server import SOCKS5ServerStreamProtocol
@@ -21,6 +20,7 @@ class ShadowsocksLocalServerProtocol(SOCKS5ServerStreamProtocol):
         self.proxy_port = self.config.remote_port
 
         self.is_first_packet_sent = False
+        self._tcp_session_target_addr = None
 
     def get_relay_protocal(self):
         return ShadowsocksClientRelayProtocol(self.data_received_from_remote,
@@ -28,6 +28,8 @@ class ShadowsocksLocalServerProtocol(SOCKS5ServerStreamProtocol):
                                               self.config)
 
     async def connect_to_addr_tcp(self, addr: Socks5AddrHeader):
+        self._tcp_session_target_addr = addr
+
         ret = await self.set_up_relay(self.proxy_server, self.proxy_port)
         if ret:
             return True, (self.client.transport.get_extra_info('sockname'))
@@ -36,9 +38,9 @@ class ShadowsocksLocalServerProtocol(SOCKS5ServerStreamProtocol):
 
 
     def data_received(self, data):
-        if self.sock5_processor.get_state() == constants.STAGE_SOCKS5_TCP_RELAY:
+        if self.sock5_processor.tcp_relaying():
             if not self.is_first_packet_sent:
-                data = self.sock5_processor.tcp_session_target_addr.to_bytes() + data
+                data = self._tcp_session_target_addr.to_bytes() + data
                 self.is_first_packet_sent = True
 
             asyncio.ensure_future(self.send_data_to_remote(self.client, data), loop=self.loop)

@@ -6,8 +6,9 @@
 # Info:
 #
 #
-import encrypt
 import struct
+
+import encrypt
 
 ONETIMEAUTH_BYTES = 10
 ONETIMEAUTH_CHUNK_BYTES = 12
@@ -59,9 +60,6 @@ STAGE_SOCKS5_REQUEST = 2
 STAGE_SOCKS5_UDP_ASSOCIATE = 5
 STAGE_SOCKS5_TCP_RELAY = 6
 STAGE_DESTROYED = -1
-
-SOCKS_SERVER_MODE_TCP_RELAY = 'tcp_relay'
-SOCKS_SERVER_MODE_UDP_RELAY = 'udp_relay'
 
 ##################################################################
 
