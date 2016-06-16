@@ -38,8 +38,11 @@ class SOCKS5ConnectProtocol(BaseProtocol):
 
         self.user = user
         self.password = password
-        self.auth_method = ((self.user and self.password) and constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED or
-                            constants.SOCKS5_METHOD_USERNAME_PASSWORD)
+
+        if (self.user and self.password):
+            self.auth_method = constants.SOCKS5_METHOD_USERNAME_PASSWORD
+        else:
+            self.auth_method = constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED
 
         self.state = STAGE_SOCKS5_METHOD_SELECT
 

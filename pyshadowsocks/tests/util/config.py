@@ -43,7 +43,7 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(ns.ota_enabled, False)
 
         ns = parse_args_new(
-            args='socks5ssl --user root --password=123456 remote --listen_port 9004'.split(
+            args='socks5ssl --user root --password 123456 remote --listen_port 9004'.split(
                 ' '))
         self.assertEqual(ns.protocol_mode, constants.ARG_PROTOCOL_SOCKS5OVERSSL)
         self.assertEqual(ns.server_mode, constants.ARG_REMOTE_SERVER)
@@ -53,7 +53,7 @@ class ConfigTest(unittest.TestCase):
 
         # ss.py socks5ssl local --remote_host 127.0.0.1 --remote_port 9004 --socks_port 10010
         ns = parse_args_new(
-            args='socks5ssl --user root --password=123456 local --remote_host 127.0.0.1 --remote_port 9004 --socks_port 10010'.split(
+            args='socks5ssl --user root --password 123456 local --remote_host 127.0.0.1 --remote_port 9004 --socks_port 10010'.split(
                 ' '))
         self.assertEqual(ns.protocol_mode, constants.ARG_PROTOCOL_SOCKS5OVERSSL)
         self.assertEqual(ns.server_mode, constants.ARG_LOCAL_SERVER)

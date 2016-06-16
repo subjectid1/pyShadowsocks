@@ -28,7 +28,9 @@ class SOCKS5SSLTest(unittest.TestCase):
                  constants.ARG_REMOTE_PORT: 9002}
         local_config = Namespace(**_args)
 
-        _args = {constants.ARG_LISTEN_PORT: 9002}
+        _args = {constants.ARG_LISTEN_PORT: 9002,
+                 constants.ARG_USERNAME: 'user',
+                 constants.ARG_PASSWORD: '123456'}
         retmote_config = Namespace(**_args)
 
         coro = loop.create_server(lambda: SOCKS5SSLProxyServerProtocol(loop, retmote_config),
@@ -54,7 +56,9 @@ class SOCKS5SSLTest(unittest.TestCase):
             client_protocol.send_stream(http_request_content)
 
         connect_coro = loop.create_connection(
-            lambda: SOCKS5ConnectProtocol(loop, 'www.12306.cn', 80, conneted_callback, data_callback), sock=lsock)
+            lambda: SOCKS5ConnectProtocol(loop, 'www.12306.cn', 80, conneted_callback, data_callback,
+                                          user='user', password='123456'),
+            sock=lsock)
 
         _, client_protocol = loop.run_until_complete(connect_coro)
 

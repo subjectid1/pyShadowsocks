@@ -19,11 +19,16 @@ from protocol.socks5.socks5_processor import Socks5Processor
 class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
     def connection_made(self, transport):
         super(SOCKS5ServerStreamProtocol, self).connection_made(transport)
-        auth = (self.config.user and
-                constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED or
-                constants.SOCKS5_METHOD_USERNAME_PASSWORD)
 
-        username_passwords = {self.config.user: self.config.password}
+        if (hasattr(self.config, constants.ARG_USERNAME)):
+            auth = constants.SOCKS5_METHOD_USERNAME_PASSWORD
+        else:
+            auth = constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED
+
+        if auth == constants.SOCKS5_METHOD_USERNAME_PASSWORD:
+            username_passwords = {self.config.user: self.config.password}
+        else:
+            username_passwords = None
 
         self.sock5_processor = Socks5Processor(self.loop,
                                                self.transport,
