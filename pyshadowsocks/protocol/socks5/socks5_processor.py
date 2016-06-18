@@ -121,10 +121,12 @@ class Socks5Processor(object):
             #
             if user in self.username_passwords and self.username_passwords[user] == password:
                 self.state = constants.STAGE_SOCKS5_REQUEST
-                self.transport.write(STRUCT_BB.pack(constants.SOCKS5_VERSION, 0))
+                # The VER field contains the current version of the subnegotiation,
+                # which is X'01'.
+                self.transport.write(STRUCT_BB.pack(0x01, 0))
                 return True
             else:
-                self.transport.write(STRUCT_BB.pack(constants.SOCKS5_VERSION, 0xFF))
+                self.transport.write(STRUCT_BB.pack(0x01, 0xFF))
                 self.transport.close()
                 return False
 

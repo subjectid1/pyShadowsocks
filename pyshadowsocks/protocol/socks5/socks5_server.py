@@ -20,7 +20,7 @@ class SOCKS5ServerStreamProtocol(ServerStreamRelayProtocol):
     def connection_made(self, transport):
         super(SOCKS5ServerStreamProtocol, self).connection_made(transport)
 
-        if (hasattr(self.config, constants.ARG_USERNAME)):
+        if (hasattr(self.config, constants.ARG_USERNAME) and getattr(self.config, constants.ARG_USERNAME)):
             auth = constants.SOCKS5_METHOD_USERNAME_PASSWORD
         else:
             auth = constants.SOCKS5_METHOD_NO_AUTHENTICATION_REQUIRED

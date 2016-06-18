@@ -54,8 +54,8 @@ $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#eg
    
 * Mac OSX Client
 
-It's you choice to use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega/wiki) or Proxies configuration of network setting, but with GoAgentX, you can run local
- server and switch SOCKS proxies at the same time, making task easier. 
+For setting up system/application to use SOCKS5 proxy, It's you choice to use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega/wiki) or just Proxies configuration of network setting, 
+but with GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
 
 1. Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
 
@@ -76,7 +76,7 @@ ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_por
 
 * Mac OSX Client
 
-Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level,
+    Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level,
 transparent from applications.
 
 1. After running the local server, config the proxifier's SOCKS setting
