@@ -81,13 +81,14 @@ ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_por
 transparent from applications.
 
 1. After running the local server, config the proxifier's SOCKS setting
-![proxifier's SOCKS setting](screenshots/proxifier_socks_setting.png)
+    ![proxifier's SOCKS setting](screenshots/proxifier_socks_setting.png)
 2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
-![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
+    ![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
 
 * iOS Client
-A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol, setup a proxy config: 
-![a.big.t proxy setting](screenshots/abigt_setting.png)
+
+    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol, setup a proxy config: 
+    ![a.big.t proxy setting](screenshots/abigt_setting.png)
 
 
         
