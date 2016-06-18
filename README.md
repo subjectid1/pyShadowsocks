@@ -45,15 +45,27 @@ $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#eg
 
 * proxy server
 
-```
-ss remote --listen_port 8099 shadowsocks --cipher_method aes-256-cfb --password 123456 &
-```
+    1. shadowsocks
+
+    ```
+    ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
+    ```
+    
+    2. socks5ssl
+    
+    ```
+    ss socks5ssl --user user --password 123456 remote --listen_port 9000
+    ```
     
 * local socks5 server:
-
-```
-ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method aes-256-cfb --password 123456
-```
+    1. shadowsocks
+    ```
+    ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
+    ```
+    2. socks5ssl
+    ```
+    ss socks5ssl --user user --password 123456 local --remote_host 10.110.110.110 --remote_port 9000 --socks_port 10012 &
+    ```
    
 ## Mac Client
 * Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
@@ -70,5 +82,5 @@ ss local --remote_host 8.8.8.8 --remote_port 8099 shadowsocks --cipher_method ae
 4. Use Apple's cryto library for Mac OS X instead of openssl
 5. Filtering connections to local ip for security consideration
 6. Flow control
-7. Custom protocol with random bytes padding, carry TCP/UPD/HTTP traffic, get away from DPI
-8. Multi threading for multiple user/port
+7. Custom protocol, carry TCP/UPD/HTTP traffic
+8. Multi threading/process for multiple user/port
