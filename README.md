@@ -71,7 +71,7 @@ ss socks5ssl --user user --password 123456 remote --listen_port 9000
     
 * local server
 ```
-ss socks5ssl local --remote_host 52.79.152.149  --remote_port 9004 --socks_port 10012 & 
+ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_port 10012 & 
 ```
 
 * Mac OSX Client
