@@ -125,7 +125,7 @@ ARUMENTS_FOR_ADD_PARSER = {
         ARG_OTA_ENABLED: {'required': False, 'default': False},
     },
     ARG_PROTOCOL_SOCKS5OVERSSL: {
-        ARG_USERNAME: {'required': True, 'type': str},
-        ARG_PASSWORD: {'required': True, 'type': str},
+        ARG_USERNAME: {'required': False, 'type': str},
+        ARG_PASSWORD: {'required': False, 'type': str},
     }
 }
