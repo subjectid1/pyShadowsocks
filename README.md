@@ -85,9 +85,8 @@ transparent from applications.
 2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
 ![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
 
-* iOS Client: A.BIG.T
-
-Setup a proxy config: 
+* iOS Client
+A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol, setup a proxy config: 
 ![a.big.t proxy setting](screenshots/abigt_setting.png)
 
 
