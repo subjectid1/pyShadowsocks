@@ -79,10 +79,10 @@ ss socks5ssl local --remote_host 52.79.152.149  --remote_port 9004 --socks_port 
 Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level,
 transparent from applications.
 
-1. After running the local server, config 
+1. After running the local server, config the proxifier's SOCKS setting
 ![proxifier's SOCKS setting](screenshots/proxifier_socks_setting.png)
 2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
-![proxifier's SOCKS setting](screenshots/proxifier_rules_setting.png)
+![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
 
         
 # TODO
