@@ -29,14 +29,14 @@ Mac OS has a deprecated openSSL and does not includes the header files, so you n
 * build openSSL manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
 
 ```
-$ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
+sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
     
 * Use brew to install openSSL
 
 ```
-$ brew install openssl
-$ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
+brew install openssl
+sudo pip3 install -U -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 # Run it!
@@ -44,13 +44,14 @@ $ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#eg
 ## For shadowsocks protocol
 
 * proxy server
-    ```
-    ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
-    ```
+```
+ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
+```
+
 * local server
-    ```
-    ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
-    ```
+```
+ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
+```
    
 * Mac OSX Client
 
@@ -84,6 +85,13 @@ transparent from applications.
 2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
 ![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
 
+* iOS Client: A.BIG.T
+
+Setup a proxy config: 
+![a.big.t proxy setting](screenshots/abigt_setting.png)
+
+
+        
         
 # TODO
 
