@@ -25,6 +25,8 @@ class SOCKS5SSLTest(unittest.TestCase):
         loop = asyncio.get_event_loop()
 
         _args = {constants.ARG_REMOTE_HOST: '127.0.0.1',
+                 constants.ARG_USERNAME: 'user',
+                 constants.ARG_PASSWORD: '123456',
                  constants.ARG_REMOTE_PORT: 9002}
         local_config = Namespace(**_args)
 
