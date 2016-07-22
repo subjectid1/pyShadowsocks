@@ -17,25 +17,43 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 
 # INSTALLATION
 ## For Ubuntu 14.04
+* python3
 
 ```
-$ sudo apt-get install openssl
-$ sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
+sudo apt-get install -y python-software-properties
+sudo add-apt-repository ppa:fkrull/deadsnakes
+sudo apt-get update
+sudo apt-cache show python3.5
+sudo apt-get install -y python3.5 python3.5-dev
+sudo apt-get install python3.5-venv
+sudo apt-get install python3.4-venv
+```
+
+* openssl
+
+```shell
+sudo apt-get install openssl
+```
+
+* ME
+
+```shell
+sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 ## For Mac OSX
 Mac OS has a deprecated openSSL and does not includes the header files, so you need to install openSSL library manually.
 
-* build openSSL manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
+* openssl
+	* build openSSL manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
+	* or Use brew to install openSSL
+	
+	```shell
+	brew install openssl
+	```
+* ME
 
-```
-sudo pip3 install -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
-```
-    
-* Use brew to install openSSL
-
-```
-brew install openssl
+```shell
 sudo pip3 install -U -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
@@ -44,41 +62,44 @@ sudo pip3 install -U -e git+https://github.com/FTwO-O/pyShadowsocks.git@master#e
 ## For shadowsocks protocol
 
 * proxy server
-```
+
+```shell
 ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
 ```
 
 * local server
-```
+
+```shell
 ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
 ```
    
 * Mac OSX Client
-
-For setting up system/application to use SOCKS5 proxy, It's you choice to use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega/wiki) or just Proxies configuration of network setting, 
-but with GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
+With GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
 
 1. Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
 
 2. Add a shell service config (to start local socks server) and then click the ON button
 ![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
+* iOS Client: Shadowrocket、A.BIG.T、Surge
+
 ## For socks5ssl protocol
     
 * proxy server
-```
+
+```shell
 ss socks5ssl --user user --password 123456 remote --listen_port 9000
 ```
     
 * local server
-```
+
+```shell
 ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_port 10012 & 
 ```
 
 * Mac OSX Client
 
-    Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level,
-transparent from applications.
+    Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level, transparent from applications.
 
 1. After running the local server, config the proxifier's SOCKS setting
     ![proxifier's SOCKS setting](screenshots/proxifier_socks_setting.png)
@@ -87,7 +108,8 @@ transparent from applications.
 
 * iOS Client
 
-    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol, setup a proxy config: 
+    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol. 
+    setup a proxy config for socks5ssl with A.BIG.T: 
     ![a.big.t proxy setting](screenshots/abigt_setting.png)
 
 
@@ -97,7 +119,7 @@ transparent from applications.
 
 1. ~~SOCKS5 user/password authentication~~
 2. ~~SOCKS5 over SSL~~
-3. ~~Remove the cryptography library, use openssl with ctypes.~~
+3. ~~Remove the cryptography library, use openSSL with ctypes.~~
 4. Use Apple's cryto library for Mac OS X instead of openssl
 5. Filtering connections to local ip for security consideration
 6. Flow control
