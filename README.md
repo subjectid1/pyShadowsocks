@@ -13,7 +13,18 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 # FEATURE
 * shadowsocks protocol implements TCP proxy without OTA feature, no UDP
 * sock5ssl implements only SOCKS CONNECT, no BIND/UDP ASSOCIATE
+  
+ 
+# TODO
 
+1. ~~SOCKS5 user/password authentication~~
+2. ~~SOCKS5 over SSL~~
+3. ~~Remove the cryptography library, use openSSL with ctypes.~~
+4. Use Apple's cryto library for Mac OS X instead of openssl
+5. Filtering connections to local ip for security consideration
+6. Flow control
+7. Custom protocol, carry TCP/UPD/HTTP traffic
+8. Multi threading/process for multiple user/port
 
 # INSTALLATION
 ## For Ubuntu 14.04
@@ -74,14 +85,15 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host
 ```
    
 * Mac OSX Client
-With GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
+
+    With GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
 
 1. Download [GoAgentX for Mac](https://goagentx.googlecode.com/files/GoAgentX-v2.2.9.dmg).
 
 2. Add a shell service config (to start local socks server) and then click the ON button
 ![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
-* iOS Client: Shadowrocket、A.BIG.T、Surge
+* iOS Client: Shadowrocket、A.BIG.T、Surge...
 
 ## For socks5ssl protocol
     
@@ -112,16 +124,3 @@ ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_por
     setup a proxy config for socks5ssl with A.BIG.T: 
     ![a.big.t proxy setting](screenshots/abigt_setting.png)
 
-
-        
-        
-# TODO
-
-1. ~~SOCKS5 user/password authentication~~
-2. ~~SOCKS5 over SSL~~
-3. ~~Remove the cryptography library, use openSSL with ctypes.~~
-4. Use Apple's cryto library for Mac OS X instead of openssl
-5. Filtering connections to local ip for security consideration
-6. Flow control
-7. Custom protocol, carry TCP/UPD/HTTP traffic
-8. Multi threading/process for multiple user/port
