@@ -28,7 +28,7 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 
 # INSTALLATION
 ## For Ubuntu 14.04
-* python3
+* python3.5
 
 ```
 sudo apt-get install -y python-software-properties
@@ -37,7 +37,6 @@ sudo apt-get update
 sudo apt-cache show python3.5
 sudo apt-get install -y python3.5 python3.5-dev
 sudo apt-get install python3.5-venv
-sudo apt-get install python3.4-venv
 ```
 
 * openssl
@@ -50,6 +49,13 @@ sudo apt-get install openssl
 
 ```shell
 sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
+```
+
+## For Ubuntu 16.04
+* python3.5
+
+```
+sudo apt-get install python3-pip
 ```
 
 ## For Mac OSX
