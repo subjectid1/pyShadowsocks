@@ -23,7 +23,7 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 4. Use Apple's cryto library for Mac OS X instead of openssl
 5. Filtering connections to local ip for security consideration
 6. Flow control
-7. Custom protocol, carry TCP/UPD/HTTP traffic
+7. Custom protocol
 8. Multi threading/process for multiple user/port
 
 # INSTALLATION
@@ -45,6 +45,7 @@ sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 
 ```
 sudo apt-get install python3-pip openssl
+sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 ## For Mac OSX
@@ -82,7 +83,7 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host
 2. Add a shell service config (to start local socks server) and then click the ON button
 ![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
-* iOS Client: Shadowrocket、A.BIG.T、Surge...
+* iOS Client: [Shadowrocket](https://itunes.apple.com/cn/app/shadowrocket/id932747118?mt=8)、[Surge](https://itunes.apple.com/us/app/surge-web-developer-tool-proxy/id1040100637?mt=8) and [Potatso](https://itunes.apple.com/cn/app/tu-dou-si-potatso-qiang-da/id1070901416?l=en&mt=8)...
 
 ## For socks5ssl protocol(Deprecated)
     
@@ -104,12 +105,11 @@ ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_por
 
 1. After running the local server, config the proxifier's SOCKS setting
     ![](screenshots/proxifier_socks_setting.png)
-2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
+2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that must not use proxy 
     ![](screenshots/proxifier_rules_setting.png)
 
 * iOS Client
 
-    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol. 
-    setup a proxy config for socks5ssl with A.BIG.T: 
+    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol: 
     ![](screenshots/abigt_setting.png)
 
