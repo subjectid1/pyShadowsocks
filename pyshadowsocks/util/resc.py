@@ -8,7 +8,7 @@
 #
 
 import resource
-
+import settings
 
 def get_resource_usage_report():
     r = resource.getrusage(0)
