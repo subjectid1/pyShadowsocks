@@ -51,6 +51,8 @@ def set_open_file_limit_up_to(limit=65536):
 
     soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
     settings.CONFIG_LOG.info('open file limit set to %d:%d', soft, hard)
+    return (soft, hard)
+
 
 
 if __name__ == '__main__':
