@@ -43,11 +43,14 @@ def set_open_file_limit_up_to(limit=65536):
     while limit > soft:
         try:
             resource.setrlimit(resource.RLIMIT_NOFILE, (limit, hard))
+            break
         except ValueError:
             limit -= 256
+        except:
+            settings.CONFIG_LOG.exception('unexpected exception')
 
     soft, hard = resource.getrlimit(resource.RLIMIT_NOFILE)
-    return (soft, hard)
+    settings.CONFIG_LOG.info('open file limit set to %d:%d', soft, hard)
 
 
 if __name__ == '__main__':
