@@ -42,7 +42,7 @@ def set_open_file_limit_up_to(limit=65536):
 
     while limit > soft:
         try:
-            resource.setrlimit(resource.RLIMIT_NOFILE, (20240, hard))
+            resource.setrlimit(resource.RLIMIT_NOFILE, (limit, hard))
         except ValueError:
             limit -= 256
 
