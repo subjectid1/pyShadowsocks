@@ -28,7 +28,6 @@ normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspectio
 
 # INSTALLATION
 ## For Ubuntu 14.04
-* python3.5
 
 ```
 sudo apt-get install -y python-software-properties
@@ -37,42 +36,26 @@ sudo apt-get update
 sudo apt-cache show python3.5
 sudo apt-get install -y python3.5 python3.5-dev
 sudo apt-get install python3.5-venv
-```
-
-* openssl
-
-```shell
 sudo apt-get install openssl
-```
 
-* ME
-
-```shell
 sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 ## For Ubuntu 16.04
-* python3.5
 
 ```
-sudo apt-get install python3-pip
+sudo apt-get install python3-pip openssl
 ```
 
 ## For Mac OSX
 Mac OS has a deprecated openSSL and does not includes the header files, so you need to install openSSL library manually.
 
-* openssl
-	* build openSSL manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
-	* or Use brew to install openSSL
-	
-	```shell
-	brew install openssl
-	```
-* ME
-
 ```shell
+brew install openssl
 sudo pip3 install -U -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
+
+You can build openssl manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
 
 # Run it!
 
@@ -101,7 +84,7 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host
 
 * iOS Client: Shadowrocket、A.BIG.T、Surge...
 
-## For socks5ssl protocol
+## For socks5ssl protocol(Deprecated)
     
 * proxy server
 
@@ -120,13 +103,13 @@ ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_por
     Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level, transparent from applications.
 
 1. After running the local server, config the proxifier's SOCKS setting
-    ![proxifier's SOCKS setting](screenshots/proxifier_socks_setting.png)
+    ![](screenshots/proxifier_socks_setting.png)
 2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that  must not use proxy 
-    ![proxifier's rules setting](screenshots/proxifier_rules_setting.png)
+    ![](screenshots/proxifier_rules_setting.png)
 
 * iOS Client
 
     A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol. 
     setup a proxy config for socks5ssl with A.BIG.T: 
-    ![a.big.t proxy setting](screenshots/abigt_setting.png)
+    ![](screenshots/abigt_setting.png)
 
