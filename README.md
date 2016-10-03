@@ -45,6 +45,8 @@ sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 
 ```
 sudo apt-get install python3-pip openssl
+sudo pip3 install pip --upgrade
+sudo pip3 install setuptools
 sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
