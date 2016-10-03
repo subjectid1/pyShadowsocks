@@ -53,6 +53,8 @@ Mac OS has a deprecated openSSL and does not includes the header files, so you n
 
 ```shell
 brew install openssl
+sudo pip3 install pip --upgrade
+sudo pip3 install setuptools
 sudo pip3 install -U -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
