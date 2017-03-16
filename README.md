@@ -11,9 +11,7 @@ Shadowsocks is mainly used for bypassing Great Firewall of China, since the data
 normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspection, it's hard to block.
 
 # FEATURE
-* shadowsocks protocol implements TCP proxy without OTA feature, no UDP
-* sock5ssl implements only SOCKS CONNECT, no BIND/UDP ASSOCIATE
-  
+* shadowsocks protocol implements TCP proxy without OTA feature, no UDP  
  
 # TODO
 
@@ -78,7 +76,7 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_por
 ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
 ```
    
-* Mac OSX Client
+* Mac OSX GUI wrapper
 
     With GoAgentX, you can run local server and switch SOCKS proxies at the same time, making task easier. 
 
@@ -88,32 +86,3 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host
 ![GoAgentX setting for pyShadowsocks](screenshots/goagentx_shell_service_config.png)
 
 * iOS Client: [Shadowrocket](https://itunes.apple.com/cn/app/shadowrocket/id932747118?mt=8)、[Surge](https://itunes.apple.com/us/app/surge-web-developer-tool-proxy/id1040100637?mt=8) and [Potatso](https://itunes.apple.com/cn/app/tu-dou-si-potatso-qiang-da/id1070901416?l=en&mt=8)...
-
-## For socks5ssl protocol(Deprecated)
-    
-* proxy server
-
-```shell
-ss socks5ssl --user user --password 123456 remote --listen_port 9000
-```
-    
-* local server
-
-```shell
-ss socks5ssl local --remote_host 110.110.110.110  --remote_port 9000 --socks_port 10012 & 
-```
-
-* Mac OSX Client
-
-    Proxifier is a network tool that tuns all tcp traffic going through SOCKS proxy, it works at network driver level, transparent from applications.
-
-1. After running the local server, config the proxifier's SOCKS setting
-    ![](screenshots/proxifier_socks_setting.png)
-2. Setup default rule to use the SOCKS proxy, create another rule for proxy ip that must not use proxy 
-    ![](screenshots/proxifier_rules_setting.png)
-
-* iOS Client
-
-    A.BIG.T is a iOS proxy App, supporting http/socks5/shadowsocks protocol: 
-    ![](screenshots/abigt_setting.png)
-
