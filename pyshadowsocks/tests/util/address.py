@@ -9,7 +9,7 @@
 import unittest
 
 import constants
-from util.net.address import what_type_of_the_address
+from util import what_type_of_the_address
 
 
 class AddressTest(unittest.TestCase):

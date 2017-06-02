@@ -14,7 +14,7 @@ from constants import STAGE_SOCKS5_METHOD_SELECT, STAGE_SOCKS5_TCP_RELAY, STRUCT
     STAGE_SOCKS5_REQUEST
 from protocol.COMMON.base_protocal import BaseProtocol
 from protocol.socks5.header import Socks5AddrHeader
-from util.net.address import what_type_of_the_address
+from util import what_type_of_the_address
 
 
 class SOCKS5ConnectProtocol(BaseProtocol):
@@ -112,7 +112,6 @@ class SOCKS5ConnectProtocol(BaseProtocol):
     def _do_socks5_username_password_authentication(self, data):
         _, reply_code = constants.STRUCT_BB.unpack_from(data)
         return reply_code == 0x00
-
 
     def _send_socks5_connect_request(self):
         #

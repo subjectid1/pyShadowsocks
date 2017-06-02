@@ -6,16 +6,16 @@
 # Info:
 #
 #
+import os
 import unittest
 
-import os
 from encrypt import SymmetricEncryptions, SymmetricEncryptionsKeyAndIVLength
-from encrypt.symmetric_encryptor import SymmetricEncryptor
+from encrypt import SymmetricEncryptor
 
 
 class SymmetricTests(unittest.TestCase):
     def test_all_method(self):
-        for encrypt_method in SymmetricEncryptions:
+        for encrypt_method in SymmetricEncryptions.keys():
             key_size, iv_size = SymmetricEncryptionsKeyAndIVLength[encrypt_method]
 
             key = os.urandom(key_size)
@@ -31,7 +31,7 @@ class SymmetricTests(unittest.TestCase):
             self.assertEqual(data, plaintext)
 
     def test_update_and_end(self):
-        for encrypt_method in SymmetricEncryptions:
+        for encrypt_method in SymmetricEncryptions.keys():
             key_size, iv_size = SymmetricEncryptionsKeyAndIVLength[encrypt_method]
 
             key = os.urandom(key_size)
@@ -53,7 +53,6 @@ class SymmetricTests(unittest.TestCase):
 
             cipher_data2 = b''.join(cipher_data_trunks)
             raw_data2 = crypter3.decode(cipher_data2, end=True)
-
 
             self.assertEqual(len(raw_data), len(raw_data2))
             self.assertEqual(raw_data, raw_data2)

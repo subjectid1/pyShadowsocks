@@ -10,41 +10,24 @@ forward encrypt socks5 data to remote proxy, and then the proxy forward the sock
 Shadowsocks is mainly used for bypassing Great Firewall of China, since the data is encrypt and sent over 
 normal TCP/UDP, no handshake, no fingerprint, getting away from packet inspection, it's hard to block.
 
-# FEATURE
+# FEATURES
 * shadowsocks protocol implements TCP proxy without OTA feature, no UDP  
  
 # TODO
 
-1. ~~SOCKS5 user/password authentication~~
-2. ~~SOCKS5 over SSL~~
-3. ~~Remove the cryptography library, use openSSL with ctypes.~~
-4. Use Apple's cryto library for Mac OS X instead of openssl
-5. Filtering connections to local ip for security consideration
-6. Flow control
-7. Custom protocol
-8. Multi threading/process for multiple user/port
+1. Filtering connections to local ip for security consideration
+2. Flow control
+3. Custom protocol
+4. Multi threading/process for multiple user/port
 
 # INSTALLATION
-## For Ubuntu 14.04
-
-```
-sudo apt-get install -y python-software-properties
-sudo add-apt-repository ppa:fkrull/deadsnakes
-sudo apt-get update
-sudo apt-cache show python3.5
-sudo apt-get install -y python3.5 python3.5-dev
-sudo apt-get install python3.5-venv
-sudo apt-get install openssl
-
-sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
-```
+Only need to install python3.6+
 
 ## For Ubuntu 16.04
 
 ```
-sudo apt-get install python3-pip openssl
-sudo pip3 install pip --upgrade
-sudo pip3 install setuptools
+sudo apt-get install python3
+sudo apt-get install python3-pip
 sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
@@ -52,13 +35,8 @@ sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 Mac OS has a deprecated openSSL and does not includes the header files, so you need to install openSSL library manually.
 
 ```shell
-brew install openssl
-sudo pip3 install pip --upgrade
-sudo pip3 install setuptools
 sudo pip3 install -U -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
-
-You can build openssl manually using the [script](https://github.com/FTwO-O/Build_Mac_Command_Line_Tools/blob/master/openssl.sh) 
 
 # Run it!
 

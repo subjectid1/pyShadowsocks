@@ -7,16 +7,15 @@
 #
 #
 #
-from abc import abstractmethod, ABCMeta
+import abc
+from util import FixedDict
 
-from util.collections.fixed_dict import FixedDict
 
-
-class PacketHeader(FixedDict, metaclass=ABCMeta):
-    @abstractmethod
+class PacketHeader(FixedDict, metaclass=abc.ABCMeta):
+    @abc.abstractmethod
     def to_bytes(self):
         pass
 
-    @abstractmethod
+    @abc.abstractmethod
     def from_bytes(self, data):
         pass

@@ -50,7 +50,8 @@ class HeaderTest(unittest.TestCase):
         header2_new.from_bytes(bytes2)
         self.assertEqual(header2_new, header2)
 
-        header3 = ShadowsocksPacketHeader(port=80, addr_type=constants.SOCKS5_ADDRTYPE_IPV6, addr='2404:6800:4005:805::1011')
+        header3 = ShadowsocksPacketHeader(port=80, addr_type=constants.SOCKS5_ADDRTYPE_IPV6,
+                                          addr='2404:6800:4005:805::1011')
         bytes3 = b'\x04$\x04h\x00@\x05\x08\x05\x00\x00\x00\x00\x00\x00\x10\x11\x00\x50'
         self.assertEqual(header3.to_bytes(), bytes3)
         header3_new = ShadowsocksPacketHeader()

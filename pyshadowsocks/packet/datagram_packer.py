@@ -7,6 +7,8 @@
 #
 #
 
+from packet.packet_header import PacketHeader
+
 
 class DatagramPacker(object):
     def __init__(self, header_type=None):

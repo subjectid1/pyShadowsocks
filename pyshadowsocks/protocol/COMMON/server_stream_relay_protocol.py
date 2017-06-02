@@ -8,10 +8,10 @@
 
 import asyncio
 import concurrent.futures
+from abc import abstractmethod, ABCMeta
 from argparse import Namespace
 
 import constants
-from abc import abstractmethod, ABCMeta
 from protocol.COMMON.base_server_relay_protocol import BaseServerRelayProtocal
 from settings import PROTO_LOG
 

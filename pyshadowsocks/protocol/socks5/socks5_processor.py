@@ -15,7 +15,7 @@ from constants import STAGE_SOCKS5_UDP_ASSOCIATE, \
     STAGE_SOCKS5_TCP_RELAY, \
     STRUCT_BBB, STRUCT_BB, STRUCT_B, STRUCT_SOCK5_REPLY
 from protocol.socks5.header import Socks5AddrHeader
-from util.net.address import what_type_of_the_address
+from util import what_type_of_the_address
 
 
 class Socks5Processor(object):

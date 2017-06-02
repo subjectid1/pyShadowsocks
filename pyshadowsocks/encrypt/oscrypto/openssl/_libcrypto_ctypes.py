@@ -15,7 +15,7 @@ __all__ = [
     'version_info',
 ]
 
-os.environ['DYLD_LIBRARY_PATH'] = '/usr/local/openssl/lib/'
+os.environ['DYLD_LIBRARY_PATH'] = os.path.abspath(os.path.dirname(__file__))
 
 libcrypto_path = find_library('crypto')
 
@@ -25,17 +25,16 @@ if not libcrypto_path:
 libcrypto = CDLL(libcrypto_path, use_errno=True)
 
 try:
-    libcrypto.SSLeay_version.argtypes = [c_int]
-    libcrypto.SSLeay_version.restype = c_char_p
+    libcrypto.OpenSSL_version.argtypes = [c_int]
+    libcrypto.OpenSSL_version.restype = c_char_p
 except (AttributeError):
     raise FFIEngineError('Error accessing libcrypto.SSLeay_version')
 
-version_string = libcrypto.SSLeay_version(0).decode('utf-8')
+version_string = libcrypto.OpenSSL_version(0).decode('utf-8')
 version_match = re.search('\\b(\\d\\.\\d\\.\\d[a-z]*)\\b', version_string)
 if not version_match:
-    version_match = re.search('(?<=LibreSSL )(\\d\\.\\d(\\.\\d)?)\\b', version_string)
-if not version_match:
     raise LibraryNotFoundError('Error detecting the version of libcrypto')
+
 version = version_match.group(1)
 version_parts = re.sub('(\\d)([a-z]+)', '\\1.\\2', version).split('.')
 version_info = tuple(int(part) if part.isdigit() else part for part in version_parts)
@@ -72,8 +71,6 @@ p_int = POINTER(c_int)
 p_uint = POINTER(c_uint)
 
 try:
-    libcrypto.ERR_load_crypto_strings.argtypes = []
-    libcrypto.ERR_load_crypto_strings.restype = None
 
     libcrypto.ERR_get_error.argtypes = []
     libcrypto.ERR_get_error.restype = c_ulong
@@ -87,8 +84,6 @@ try:
     ]
     libcrypto.ERR_error_string.restype = c_char_p
 
-    libcrypto.ERR_free_strings.argtypes = []
-    libcrypto.ERR_free_strings.restype = None
 
     libcrypto.OPENSSL_config.argtypes = [
         c_char_p
@@ -280,13 +275,8 @@ try:
     ]
     libcrypto.EVP_PKEY_free.restype = None
 
-    libcrypto.EVP_MD_CTX_create.argtypes = []
-    libcrypto.EVP_MD_CTX_create.restype = P_EVP_MD_CTX
 
-    libcrypto.EVP_MD_CTX_destroy.argtypes = [
-        P_EVP_MD_CTX
-    ]
-    libcrypto.EVP_MD_CTX_destroy.restype = None
+
 
     libcrypto.EVP_md5.argtypes = []
     libcrypto.EVP_md5.restype = P_EVP_MD

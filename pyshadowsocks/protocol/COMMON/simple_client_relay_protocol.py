@@ -6,7 +6,6 @@
 # Info:
 #
 #
-from typing import Callable
 
 from protocol.COMMON.base_protocal import BaseProtocol
 

@@ -6,11 +6,10 @@
 # Info:
 #
 #
+import os
 import unittest
 
-
-import os
-from encrypt.base.data_encoder import DataEncoder
+from encrypt.data_encoder import DataEncoder
 from packet.packet_header import PacketHeader
 from packet.stream_packer import StreamPacker
 
@@ -30,12 +29,12 @@ class DummyPacketHeader(PacketHeader):
 
 
 class DummyEncoder(DataEncoder):
-
     def encode(self, data, end=False):
         return data
 
     def decode(self, data, end=False):
         return data
+
 
 class StreamPackerTest(unittest.TestCase):
     def test_StreamPacker_pack_and_unpack(self):
@@ -61,6 +60,3 @@ class StreamPackerTest(unittest.TestCase):
         out_bytes_2 = packer.out_bytes
         self.assertEqual(in_bytes_1, out_bytes_2)
         self.assertEqual(out_bytes_1, in_bytes_2)
-
-        # TODO:
-        # 1. end=True的怎么处理？

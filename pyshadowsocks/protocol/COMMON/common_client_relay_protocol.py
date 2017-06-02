@@ -6,11 +6,9 @@
 # Info:
 #
 #
-from argparse import Namespace
-from typing import Callable
-
 from abc import abstractmethod
-from packet.packet_header import PacketHeader
+from argparse import Namespace
+
 from protocol.COMMON.simple_client_relay_protocol import SimpleClientRelayProtocol
 
 
