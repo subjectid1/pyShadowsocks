@@ -15,12 +15,15 @@ __all__ = [
     'version_info',
 ]
 
-os.environ['DYLD_LIBRARY_PATH'] = os.path.abspath(os.path.dirname(__file__))
 
-libcrypto_path = find_library('crypto')
+if os.uname().sysname == 'Darwin':
+    libcrypto_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "libcrypto.dylib"))
+    libcrypto = CDLL(libcrypto_path, use_errno=True)
 
-if not libcrypto_path:
-    raise LibraryNotFoundError('The library libcrypto could not be found')
+elif os.uname().sysname == 'Linux':
+    libcrypto_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "libcrypto.so"))
+else:
+    raise LibraryNotFoundError('Unsupported system')
 
 libcrypto = CDLL(libcrypto_path, use_errno=True)
 
