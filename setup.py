@@ -8,7 +8,7 @@ README = open(os.path.join(here, 'README.md'), encoding='utf-8').read()
 
 setup(
     name='pyshadowsocks',
-    version='0.4',
+    version='0.5',
 
     author='booopooob@gmail.com',
     author_email='booopooob@gmail.com',
