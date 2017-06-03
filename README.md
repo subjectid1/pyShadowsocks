@@ -28,14 +28,14 @@ Only need to install python3.6+
 ```
 sudo apt-get install python3
 sudo apt-get install python3-pip
-sudo pip3 install -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
+sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 ## For Mac OSX
 Mac OS has a deprecated openSSL and does not includes the header files, so you need to install openSSL library manually.
 
 ```shell
-sudo pip3 install -U -e git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
+pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
 # Run it!
@@ -51,7 +51,8 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_por
 * local server
 
 ```shell
-ss shadowsocks --cipher_method aes-256-cfb --password 123456 local --remote_host 110.110.110.110 --remote_port 8099 &
+ss shadowsocks --cipher_method aes-128-cfb --password 12345678 local --remote_host ftwo.me --remote_port 8099 --socks-port 1024
+
 ```
    
 * Mac OSX GUI wrapper
