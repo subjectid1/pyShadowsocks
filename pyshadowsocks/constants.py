@@ -81,7 +81,6 @@ ARG_LOCAL_SERVER = 'local'
 ARG_REMOTE_SERVER = 'remote'
 
 ARG_SOCKS_LISTEN_PORT = 'socks_port'
-ARG_PAC_LISTEN_PORT = 'pac_port'
 
 ARG_LISTEN_PORT = 'listen_port'
 ARG_REMOTE_HOST = 'remote_host'
@@ -111,7 +110,6 @@ ARUMENTS_FOR_ADD_PARSER = {
         ARG_REMOTE_HOST: {'required': True},
         ARG_REMOTE_PORT: {'type': int, 'required': True},
         ARG_SOCKS_LISTEN_PORT: {'type': int, 'required': False, 'default': 1080},
-        ARG_PAC_LISTEN_PORT: {'type': str, 'required': False, 'default': None},
     },
     ARG_REMOTE_SERVER: {
         ARG_LISTEN_PORT: {'type': int, 'required': True},
