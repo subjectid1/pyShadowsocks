@@ -24,7 +24,7 @@ setup(
 
     package_data={
         # If any package contains *.txt or *.rst files, include them:
-        '': ['*.txt', '*.md', '*.pac'],
+        '': ['*.txt', '*.md', '*.pac', '.dylib', '.so'],
         # And include any *.msg files found in the 'hello' package, too:
     },
 
