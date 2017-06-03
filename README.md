@@ -50,8 +50,7 @@ ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_por
 * local server
 
 ```shell
-ss shadowsocks --cipher_method aes-128-cfb --password 12345678 local --remote_host ftwo.me --remote_port 8099 --socks-port 1024
-
+ ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 8099 --socks-port 10088
 ```
    
 * Mac OSX GUI wrapper
