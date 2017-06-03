@@ -37,17 +37,13 @@ sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
-# Run it!
-
-## For shadowsocks protocol
-
-### Server side
+# Server side
 
 ```shell
 ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
 ```
 
-### Client side
+# Client side
 
 ```shell
  ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 8099 --socks-port 10088
