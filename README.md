@@ -40,7 +40,7 @@ pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pysha
 # Server side
 
 ```shell
-ss shadowsocks --cipher_method aes-256-cfb --password 123456 remote --listen_port 8099 &
+ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099 &
 ```
 
 # Client side
