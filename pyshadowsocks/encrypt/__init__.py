@@ -18,4 +18,4 @@ SymmetricEncryptions = {
     AES_256_CFB: SymmetricEncryptor,
 }
 
-SymmetricEncryptionsKeyAndIVLength = {enc: get_key_and_iv_length(enc) for enc in SymmetricEncryptions}
+SymmetricEncryptionsKeyAndIVLength = {AES_128_CFB: (16, 16), AES_256_CFB: (32, 16)}
