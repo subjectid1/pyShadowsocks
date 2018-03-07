@@ -24,10 +24,12 @@ normal TCP, no handshake, no fingerprint, getting away from packet inspection, i
 Only need to install python3.6+
 
 ## For Ubuntu 16.04
+如果本地的Python3版本>3.5, 不需要再安装Python3
 
 ```
 sudo apt-get install python3
 sudo apt-get install python3-pip
+sudo pip3 install setuptools
 sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 ```
 
