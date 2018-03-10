@@ -11,29 +11,31 @@ Shadowsocks is mainly used for bypassing Great Firewall of China, since the data
 normal TCP, no handshake, no fingerprint, getting away from packet inspection, it's hard to block.
 
 # FEATURES
-* implements TCP proxy without OTA feature, no UDP
-* only AES-128/256 encryption supported now.
+* 只实现了TCP代理，UDP未实现，OTA特性未实现
+* 加密方法只有AES-128/256.
 
 # Server side
-system:Ubuntu 16.04, 如果本地的Python3版本>3.6, 不需要再安装Python3
+如果本地的Python3版本>3.6, 不需要再安装Python3, Ubuntu 16.04用如下命令安装和启动
 
 ```shell
 sudo apt-get install python3
 sudo apt-get install python3-pip
+
 sudo pip3 install setuptools
 sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
+
 ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099 &
 ```
 
 # Client side
 
-1. Within GoAgentX, Add a shell service config with the script:
+1. 使用GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）:
 ```shell
 pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
  ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 8099 --socks-port 10088
 ```
 
-2. Use another shadowsocks client [gsc](https://github.com/FTwOoO/go-shadowsocks-client) which will auto set the system proxy setting:
+2. 或者使用[gsc](https://github.com/FTwOoO/go-shadowsocks-client)，自动设置系统代理，自动判断是否需要走代理，无需额外的配置:
 ```
 gsc --cipher AES-128-CFB --password 123456 --c "ftwo.me:8099"
 ```
