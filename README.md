@@ -23,6 +23,13 @@ sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099 &
 ```
 
+或者使用Docker镜像安装:
+
+```
+docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099
+```
+
+
 # Client side
 
 1. 使用GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）:
