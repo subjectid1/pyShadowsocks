@@ -20,29 +20,26 @@ sudo apt-get install python3-pip
 sudo pip3 install setuptools
 sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 
-ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099 &
+ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 9067 &
 ```
 
 或者使用Docker镜像安装:
 
 ```
-docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --cipher_method aes-128-cfb --password 123456 remote --listen_port 8099
+apt install docker.io
+
+docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --cipher_method aes-128-cfb --password 123456 remote --listen_port 9067
 ```
 
 
 # Client side
 
-1. 使用GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）:
 ```shell
 pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
- ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 8099 --socks-port 10088
+ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 9067 --socks-port 10088
 ```
-
-2. 或者使用[gsc](https://github.com/FTwOoO/go-shadowsocks-client)，自动设置系统代理，自动判断是否需要走代理，无需额外的配置:
-```
-gsc --cipher AES-128-CFB --password 123456 --c "ftwo.me:8099"
-```
-
+1. 通过GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）直接运行
+2. 或者通过自带GFW List的浏览器插件并设置SOCKS代理至127.0.0.1:10088
  
 # TODO
 1. Filtering connections to local ip for security consideration
