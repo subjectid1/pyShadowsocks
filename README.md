@@ -34,7 +34,7 @@ docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --ci
 
 # 客户端
 
-* 使用客户端软件指定服务地址端口，手机端如SHADOWROCKET，或者SHADOWSOCKT ANDROID都可以
+* 使用客户端软件指定服务地址端口，手机端如SHADOWROCKET，或者SHADOWSOCKS ANDROID都可以
 * PC/MAC上运行，先运行客户端于本地监听SOCKS5端口，再通过系统设置/代理软件/浏览器修改代理设置
 
   1. 运行客户端
