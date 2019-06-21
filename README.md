@@ -24,7 +24,7 @@ sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=
 ss shadowsocks --cipher_method aes-128-cfb --password xxxx remote --listen_port 9067 &
 ```
 
-* 使用Docker镜像安装运行:
+* 或者使用Docker镜像安装运行:
 
 ```
 sudo apt install docker.io
