@@ -11,7 +11,8 @@ Shadowsocks算是SOCKS5协议的简化+加密，足够简单可用(如果要在�
 * 加密方法只有AES-128/256.
 
 # Server side
-如果本地的Python3版本>3.6, 不需要再安装Python3, Ubuntu 16.04用如下命令安装和启动
+
+* Python3运行：如果本地的Python3版本>3.6, 不需要再安装Python3, Ubuntu 16.04用如下命令安装和启动
 
 ```shell
 sudo apt-get install python3
@@ -20,28 +21,35 @@ sudo apt-get install python3-pip
 sudo pip3 install setuptools
 sudo pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
 
-ss shadowsocks --cipher_method aes-128-cfb --password 123456 remote --listen_port 9067 &
+ss shadowsocks --cipher_method aes-128-cfb --password xxxx remote --listen_port 9067 &
 ```
 
-或者使用Docker镜像安装:
+* 使用Docker镜像安装运行:
 
 ```
-apt install docker.io
+sudo apt install docker.io
 
-docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --cipher_method aes-128-cfb --password 123456 remote --listen_port 9067
+docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --cipher_method aes-128-cfb --password xxxx remote --listen_port 9067
 ```
 
+# 客户端
 
-# Client side
+* 使用客户端软件指定服务地址端口，手机端如SHADOWROCKET，或者SHADOWSOCKT ANDROID都可以
+* PC/MAC上运行，先运行客户端于本地监听SOCKS5端口，再通过系统设置/代理软件/浏览器修改代理设置
 
-```shell
-pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
-ss shadowsocks --cipher_method aes-128-cfb --password 123456 local --remote_host ftwo.me --remote_port 9067 --socks-port 10088
-```
-1. 通过GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）直接运行
-2. 或者通过自带GFW List的浏览器插件并设置SOCKS代理至127.0.0.1:10088
+  1. 运行客户端
+  
+  ```shell
+  pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
+  ss shadowsocks --cipher_method aes-128-cfb --password xxxx local --remote_host 11.11.11.11 --remote_port 9067 --socks-port   10808
+  ```
+  也可以用我的另一个项目gsc(不需要PYTHON环境)：
+  ```
+  gsc --cipher "AES-128-CFB" --password xxxx --server 11.11.11.11:9067 -listen 127.0.0.1:10808
+  ```
+
+  2. 通过GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）直接运行。
+     或者通过CRHOME插件SwitchyOmega设置SOCKS代理至127.0.0.1:10808，使用AUTO PROXY模式
  
-# TODO
-1. Filtering connections to local ip for security consideration
-2. add AHEAD encryption method
+
 
