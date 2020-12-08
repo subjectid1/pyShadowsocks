@@ -43,11 +43,7 @@ docker run -d -p 9067:9067 fooltwo/pyshadowsocks python ss.py  shadowsocks  --ci
   pip3 install -U git+https://github.com/FTwOoO/pyShadowsocks.git@master#egg=pyshadowsocks
   ss shadowsocks --cipher_method aes-128-cfb --password xxxx local --remote_host 11.11.11.11 --remote_port 9067 --socks-port   10808
   ```
-  也可以用我的另一个项目gsc(不需要PYTHON环境)：
-  ```
-  gsc --cipher "AES-128-CFB" --password xxxx --server 11.11.11.11:9067 -listen 127.0.0.1:10808
-  ```
-
+ 
   2. 通过GoAgentX添加一个shell service(GoAgentX内置了PAC的设置和修改系统代理的功能）直接运行。
      或者通过CRHOME插件SwitchyOmega设置SOCKS代理至127.0.0.1:10808，使用AUTO PROXY模式
  
